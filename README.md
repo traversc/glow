@@ -11,8 +11,8 @@ Status](https://travis-ci.org/traversc/glow.svg)](https://travis-ci.org/traversc
 
 *A package for making glow-y plots*
 
-The `glow` package is a framework for creating plots with glowing
-points. as an alternative way of plotting large point
+The `glow` package is a framework for creating plots with glowing points
+as an alternative way of plotting large point
 clouds.
 
 ## Gallery
@@ -46,23 +46,16 @@ remotes::install_github("traversc/glow")
 ### Some advantages over traditional techniques
 
   - Naturally displays point density
-
-  -   - Points are added together rather than occluding earlier points
+      - Points are added together rather than occluding earlier points
         in a plot
-
   - `glow` plots don’t depend on the order of points in the data (points
     are commutative and associative)
-
-  -   - Plotting a red point over a green point is the same as a green
+      - Plotting a red point over a green point is the same as a green
         point over a red point
-
   - Very fast, can be faster than `geom_point` depending on settings
-
   - Multi-threaded
-
   - No loss of precision and individual point coordinates compared to
     binning procedures
-
   - Naturally works with larger-than-memory datasets (See “Airline”
     dataset in `tests/examples.r`)
 
