@@ -17,23 +17,7 @@ vignette: >
 
 *A package for making glow-y plots*
 
-The `glow` package is a framework for creating plots with glowing points. This provides an alternative and complementary way of plotting large point clouds while naturally showing point density. `glow` can easily handle millions or even billions of data points and plot them without binning or summarization.  
-
-### Some advantages over traditional techniques
-
-* Naturally displays point density
-* * Points are added together rather than occluding earlier points in a plot
-* `glow` plots don't depend on the order of points in the data (points are commutative and associative)
-* * Plotting a red point over a green point is the same as a green point over a red point
-* Very fast, can be faster than `geom_point` depending on settings
-* Multi-threaded
-* No loss of precision and individual point coordinates compared to binning procedures
-* Naturally works with larger-than-memory datasets (See "Airline" dataset in `tests/examples.r`)
-
-## Installation
-```{r eval=FALSE}
-remotes::install_github("traversc/glow")
-```
+The `glow` package is a framework for creating plots with glowing points. as an alternative way of plotting large point clouds.  
 
 ## Gallery
 <center>
@@ -54,6 +38,22 @@ remotes::install_github("traversc/glow")
 | ![](US_coronavirus_8_19_2020.png "US_coronavirus_8_19_2020.png"){height=300px} |
 
 </center>
+
+## Installation
+```{r eval=FALSE}
+remotes::install_github("traversc/glow")
+```
+
+### Some advantages over traditional techniques
+
+* Naturally displays point density
+* * Points are added together rather than occluding earlier points in a plot
+* `glow` plots don't depend on the order of points in the data (points are commutative and associative)
+* * Plotting a red point over a green point is the same as a green point over a red point
+* Very fast, can be faster than `geom_point` depending on settings
+* Multi-threaded
+* No loss of precision and individual point coordinates compared to binning procedures
+* Naturally works with larger-than-memory datasets (See "Airline" dataset in `tests/examples.r`)
 
 ## Usage
 

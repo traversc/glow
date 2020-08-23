@@ -607,24 +607,7 @@ body {
 <!-- [![CRAN\_Downloads\_Total\_Badge](https://cranlogs.r-pkg.org/badges/grand-total/glow)](https://cran.r-project.org/package=glow) -->
 
 <p><em>A package for making glow-y plots</em></p>
-<p>The <code>glow</code> package is a framework for creating plots with glowing points. It’s primary purpose is to provide an alternative and complementary way of plotting very large point clouds while naturally showing point density. <code>glow</code> can easily handle millions or even billions of data points and plot them without binning or summarization techniques.</p>
-<h3 id="some-advantages-over-traditional-techniques">Some advantages over traditional techniques</h3>
-<ul>
-<li><p>Naturally displays point density</p></li>
-<li><ul>
-<li>Points are added together rather than occluding earlier points in a plot</li>
-</ul></li>
-<li><p><code>glow</code> plots don’t depend on the order of points in the data (points are commutative and associative)</p></li>
-<li><ul>
-<li>Plotting a red point over a green point is the same as a green point over a red point</li>
-</ul></li>
-<li><p>Very fast, can be faster than <code>geom_point</code> depending on settings</p></li>
-<li><p>Multi-threaded</p></li>
-<li><p>No loss of precision and individual point coordinates compared to binning procedures</p></li>
-<li><p>Naturally works with larger-than-memory datasets (See “Airline” dataset in <code>tests/examples.r</code>)</p></li>
-</ul>
-<h2 id="installation">Installation</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;traversc/glow&quot;</span>)</a></code></pre></div>
+<p>The <code>glow</code> package is a framework for creating plots with glowing points. as an alternative way of plotting large point clouds.</p>
 <h2 id="gallery">Gallery</h2>
 <center>
 
@@ -682,6 +665,23 @@ body {
 </table>
 </center>
 
+<h2 id="installation">Installation</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;traversc/glow&quot;</span>)</a></code></pre></div>
+<h3 id="some-advantages-over-traditional-techniques">Some advantages over traditional techniques</h3>
+<ul>
+<li><p>Naturally displays point density</p></li>
+<li><ul>
+<li>Points are added together rather than occluding earlier points in a plot</li>
+</ul></li>
+<li><p><code>glow</code> plots don’t depend on the order of points in the data (points are commutative and associative)</p></li>
+<li><ul>
+<li>Plotting a red point over a green point is the same as a green point over a red point</li>
+</ul></li>
+<li><p>Very fast, can be faster than <code>geom_point</code> depending on settings</p></li>
+<li><p>Multi-threaded</p></li>
+<li><p>No loss of precision and individual point coordinates compared to binning procedures</p></li>
+<li><p>Naturally works with larger-than-memory datasets (See “Airline” dataset in <code>tests/examples.r</code>)</p></li>
+</ul>
 <h2 id="usage">Usage</h2>
 <p>Creating a glow plot is done through the <code>GlowMapper</code> or <code>GlowMapper4</code> classes, which utilize the <code>R6</code> class framework.</p>
 <p>The class function <code>$map</code> creates a raster that can be plotted with <code>ggplot</code>’s <code>geom_raster</code>.</p>
