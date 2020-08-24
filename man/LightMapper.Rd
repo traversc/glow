@@ -76,7 +76,7 @@ for(t in 1:50) {
 }
 
 # New class object
-m <- LightMapper$new(xdim=1000, ydim = 800, blend_mode = "screen")
+m <- LightMapper$new(xdim=500, ydim = 400, blend_mode = "screen")
 
 # Map data on to raster
 m$map(x=x, y=y, intensity = 1, radius = r/100, falloff_exponent = 0.5, distance_exponent = 2)
@@ -86,8 +86,8 @@ pd <- m$output_dataframe(saturation = 1)
 
 # Plot with ggplot
 ggplot(pd, aes(x = x, y = y, fill = value)) + 
-  geom_raster(show.legend = F) +
+  geom_raster(show.legend = FALSE) +
   scale_fill_gradientn(colors=additive_alpha(c("black", "purple", "white"))) +
-  coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = F) + 
+  coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = FALSE) + 
   theme_night(bgcolor = "black")
 }

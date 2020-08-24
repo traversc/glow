@@ -3,7 +3,7 @@
 #' theme_night
 #' 
 #' A dark ggplot2 theme with a default black background intended to be used with the glow package.
-#' @usage theme_night(bgcolor = "black", base_size = 16, base_family = "")
+#' @usage theme_night(bgcolor = "black", base_size = 14, base_family = "")
 #' @param bgcolor Background color, default black. Generally you want to match the background with the lowest color value on a color scale. 
 #' @param base_size Base default font size.
 #' @param base_family Base font family.
@@ -21,41 +21,17 @@ NULL
 #' additive_alpha
 #' 
 #' Simulates additive blending on a dark to light color scale.
-#' @usage theme_night(bgcolor = "black", base_size = 16, base_family = "")
-#' @param bgcolor Background color, default black. Generally you want to match the background with the lowest color value on a color scale. 
-#' @param base_size Base default font size.
-#' @param base_family Base font family.
-#' @return A ggplot2 theme.
+#' @usage additive_alpha(colors)
+#' @param colors colors
+#' @return A simulated additive scale of the input colors.
 #' @details In R plotting (both ggplot and base R) blending is performed by alpha blending, which is an averaging effect. When combining light and glow effects, additive blending is more appropriate. 
 #' 
 #' This function simulates additive blending by increasing color on a color scale to compensate for the averaging effect of alpha blending. 
 #' 
 #' Note: this function is only appropriate for dark to light color scales.  
 #' @examples
-#' m <- GlowMapper$new(xdim=1000, ydim = 800, blend_mode = "additive")
-#' 
-#' # Map data on to raster
-#' m$map(x=1:10, y = 1:10, r = seq(0.1,1, length.out=10))
-#' 
-#' # Output raster data as a dataframe
-#' pd <- m$output_dataframe(saturation = 1)
-#' 
-#' # Use a modified magma color scale
-#' original_color_scale <- viridisLite::magma(12)
-#' additive_color_scale <- additive_alpha(original_color_scale)
-#' 
-#' # Plot with and without the modified color scale
-#' g1 <- ggplot(pd, aes(x = x, y = y, fill = value)) + 
-#'   geom_raster(show.legend = F) +
-#'   scale_fill_gradientn(colors=original_color_scale) +
-#'   coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = F) + 
-#'   theme_night(bgcolor = viridisLite::magma(1))
-#'
-#' g2 <- ggplot(pd, aes(x = x, y = y, fill = value)) + 
-#'   geom_raster(show.legend = F) +
-#'   scale_fill_gradientn(colors=additive_color_scale) +
-#'   coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = F) + 
-#'   theme_night(bgcolor = viridisLite::magma(1))
+#' m_solid <- viridisLite::magma(12)
+#' m_additive <- additive_alpha(m_solid)
 #' @name additive_alpha
 NULL
 
@@ -72,7 +48,7 @@ NULL
 #' @details 
 #' This function uses the "Newton-Raphson with fast convergence everywhere" algorithm. 
 #' 
-#' Latitude and longitude should be in units of radians. Latitude ranges from +/- pi/2 and longitude ranges from +/- pi. 
+#' Latitude and longitude should be in units of radians not degrees. Latitude ranges from +/- pi/2 and longitude ranges from +/- pi. 
 #' @seealso https://en.wikipedia.org/wiki/Talk:Mollweide_projection
 #' @examples
 #' longitude <- pi / 4
@@ -149,7 +125,7 @@ NULL
 #' }
 #' 
 #' # New class object
-#' m <- GlowMapper$new(xdim=1000, ydim = 800, blend_mode = "screen")
+#' m <- GlowMapper$new(xdim=500, ydim = 400, blend_mode = "screen")
 #' 
 #' # Map data on to raster
 #' m$map(x=x, y=y, intensity = 1, radius = r/4 + 0.1, distance_exponent = 2)
@@ -159,9 +135,9 @@ NULL
 #' 
 #' # Plot with ggplot
 #' ggplot(pd, aes(x = x, y = y, fill = value)) + 
-#'   geom_raster(show.legend = F) +
+#'   geom_raster(show.legend = FALSE) +
 #'   scale_fill_gradientn(colors=additive_alpha(c("black", "purple", "white"))) +
-#'   coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = F) + 
+#'   coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = FALSE) + 
 #'   theme_night(bgcolor = "black")
 #' @name GlowMapper
 NULL
@@ -245,7 +221,7 @@ NULL
 #' }
 #' 
 #' # New class object
-#' m <- GlowMapper4$new(xdim=1000, ydim = 800, blend_mode = "additive")
+#' m <- GlowMapper4$new(xdim=500, ydim = 400, blend_mode = "additive")
 #' 
 #' # Map data on to raster
 #' m$map(x=x, y=y, color = color, radius = r/4 + 0.1, distance_exponent = 2)
@@ -255,9 +231,9 @@ NULL
 #' 
 #' # Plot with ggplot
 #' ggplot(pd, aes(x = x, y = y, fill = rgb(r,g,b,a))) + 
-#'   geom_raster(show.legend = F) +
+#'   geom_raster(show.legend = FALSE) +
 #'   scale_fill_identity() +
-#'   coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = F) + 
+#'   coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = FALSE) + 
 #'   theme_night(bgcolor = "black")
 #' @name GlowMapper4
 NULL
@@ -332,7 +308,7 @@ NULL
 #' }
 #' 
 #' # New class object
-#' m <- LightMapper$new(xdim=1000, ydim = 800, blend_mode = "screen")
+#' m <- LightMapper$new(xdim=500, ydim = 400, blend_mode = "screen")
 #' 
 #' # Map data on to raster
 #' m$map(x=x, y=y, intensity = 1, radius = r/100, falloff_exponent = 0.5, distance_exponent = 2)
@@ -342,9 +318,9 @@ NULL
 #' 
 #' # Plot with ggplot
 #' ggplot(pd, aes(x = x, y = y, fill = value)) + 
-#'   geom_raster(show.legend = F) +
+#'   geom_raster(show.legend = FALSE) +
 #'   scale_fill_gradientn(colors=additive_alpha(c("black", "purple", "white"))) +
-#'   coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = F) + 
+#'   coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = FALSE) + 
 #'   theme_night(bgcolor = "black")
 #' @name LightMapper
 NULL
@@ -427,7 +403,7 @@ NULL
 #' }
 #' 
 #' # New class object
-#' m <- LightMapper4$new(xdim=1000, ydim = 800, blend_mode = "additive")
+#' m <- LightMapper4$new(xdim=500, ydim = 400, blend_mode = "additive")
 #' 
 #' # Map data on to raster
 #' m$map(x=x, y=y, color = color, radius = r/30+0.01, falloff_exponent = 1, distance_exponent = 2)
@@ -437,11 +413,11 @@ NULL
 #' 
 #' # Plot with ggplot
 #' ggplot(pd, aes(x = x, y = y, fill = rgb(r,g,b,a))) + 
-#'   geom_raster(show.legend = F) +
+#'   geom_raster(show.legend = FALSE) +
 #'   scale_fill_identity() +
-#'   coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = F) + 
+#'   coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = FALSE) + 
 #'   theme_night(bgcolor = "black")
-#' @name GlowMapper4
+#' @name LightMapper4
 NULL
 
 

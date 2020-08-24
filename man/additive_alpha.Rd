@@ -4,17 +4,13 @@
 \alias{additive_alpha}
 \title{additive_alpha}
 \usage{
-theme_night(bgcolor = "black", base_size = 16, base_family = "")
+additive_alpha(colors)
 }
 \arguments{
-\item{bgcolor}{Background color, default black. Generally you want to match the background with the lowest color value on a color scale.}
-
-\item{base_size}{Base default font size.}
-
-\item{base_family}{Base font family.}
+\item{colors}{colors}
 }
 \value{
-A ggplot2 theme.
+A simulated additive scale of the input colors.
 }
 \description{
 Simulates additive blending on a dark to light color scale.
@@ -27,28 +23,6 @@ This function simulates additive blending by increasing color on a color scale t
 Note: this function is only appropriate for dark to light color scales.
 }
 \examples{
-m <- GlowMapper$new(xdim=1000, ydim = 800, blend_mode = "additive")
-
-# Map data on to raster
-m$map(x=1:10, y = 1:10, r = seq(0.1,1, length.out=10))
-
-# Output raster data as a dataframe
-pd <- m$output_dataframe(saturation = 1)
-
-# Use a modified magma color scale
-original_color_scale <- viridisLite::magma(12)
-additive_color_scale <- additive_alpha(original_color_scale)
-
-# Plot with and without the modified color scale
-g1 <- ggplot(pd, aes(x = x, y = y, fill = value)) + 
-  geom_raster(show.legend = F) +
-  scale_fill_gradientn(colors=original_color_scale) +
-  coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = F) + 
-  theme_night(bgcolor = viridisLite::magma(1))
-
-g2 <- ggplot(pd, aes(x = x, y = y, fill = value)) + 
-  geom_raster(show.legend = F) +
-  scale_fill_gradientn(colors=additive_color_scale) +
-  coord_fixed(ratio = m$aspect(), xlim = m$xlim(), ylim = m$ylim(), expand = F) + 
-  theme_night(bgcolor = viridisLite::magma(1))
+m_solid <- viridisLite::magma(12)
+m_additive <- additive_alpha(m_solid)
 }

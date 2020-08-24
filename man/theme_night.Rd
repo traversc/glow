@@ -4,7 +4,7 @@
 \alias{theme_night}
 \title{theme_night}
 \usage{
-theme_night(bgcolor = "black", base_size = 16, base_family = "")
+theme_night(bgcolor = "black", base_size = 14, base_family = "")
 }
 \arguments{
 \item{bgcolor}{Background color, default black. Generally you want to match the background with the lowest color value on a color scale.}

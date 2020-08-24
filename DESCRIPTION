@@ -14,7 +14,9 @@ SystemRequirements: C++11
 LinkingTo: 
     Rcpp, RcppEigen, RcppParallel
 Imports: 
-    Rcpp, RcppParallel, scales, R6, ggplot2
+    Rcpp, RcppParallel, scales, R6
+Depends:
+    ggplot2
 Suggests:
     knitr, rmarkdown, viridisLite, magick, qs
 VignetteBuilder: knitr

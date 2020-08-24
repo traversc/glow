@@ -22,7 +22,7 @@ Performs a cartographic mollweide projection from polar coordinates (latitude/lo
 \details{
 This function uses the "Newton-Raphson with fast convergence everywhere" algorithm. 
 
-Latitude and longitude should be in units of radians. Latitude ranges from +/- pi/2 and longitude ranges from +/- pi.
+Latitude and longitude should be in units of radians not degrees. Latitude ranges from +/- pi/2 and longitude ranges from +/- pi.
 }
 \examples{
 longitude <- pi / 4
