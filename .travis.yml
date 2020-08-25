@@ -11,6 +11,7 @@ before_install:
   - ./run.sh bootstrap
 
 install:
+  - export _R_CHECK_FORCE_SUGGESTS_=0
   - ./run.sh install_aptget r-cran-rcpp r-cran-ggplot2 r-cran-scales && ./run.sh install_github cran/RcppEigen cran/RcppParallel cran/R6 traversc/stringfish traversc/qs traversc/glow
 
 script:
