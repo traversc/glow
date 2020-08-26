@@ -26,7 +26,7 @@ build:
 	# chmod 755 cleanup
 	# chmod 755 configure
 	find src/ -type f -exec chmod 644 {} \;
-	chmod 644 ChangeLog DESCRIPTION Makefile NAMESPACE README.md
+	# chmod 644 ChangeLog DESCRIPTION Makefile NAMESPACE README.md
 	# ./configure
 	# ./cleanup
 	Rscript -e "library(Rcpp); compileAttributes('.');"
@@ -41,7 +41,7 @@ install:
 	# chmod 755 cleanup
 	# chmod 755 configure
 	find src/ -type f -exec chmod 644 {} \;
-	chmod 644 ChangeLog DESCRIPTION Makefile NAMESPACE README.md
+	# chmod 644 ChangeLog DESCRIPTION Makefile NAMESPACE README.md
 	# ./configure
 	# ./cleanup
 	Rscript -e "library(Rcpp); compileAttributes('.');"
