@@ -9,7 +9,7 @@ check: $(BUILD)
 	R CMD check --as-cran $<
 
 check-cran: $(BUILD)
-	# R --interactive --no-save --args $< <<<'rhub::check_for_cran(commandArgs(T)[1])'
+	R --interactive --no-save --args $< <<<'rhub::check_for_cran(commandArgs(T)[1])'
 	# Rscript -e "rhub::check_on_solaris()"
 	Rscript -e 'rhub::check("$(BUILD)", platform = c("solaris-x86-patched"))'
 

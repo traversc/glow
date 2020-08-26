@@ -1,7 +1,7 @@
 Package: glow
 Title: Make Plots that Glow
 Version: 0.10.1
-Date: 2020-8-17
+Date: 2020-8-25
 Authors@R: c(
     person("Travers", "Ching", email = "traversc@gmail.com", role = c("aut", "cre", "cph"))
 	)
