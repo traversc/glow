@@ -68,6 +68,9 @@ library(glow)
 library(ggplot2)
 library(viridisLite) # Magma color scale
 
+# Number of threads
+nt <- 4
+
 # Load the dataset
 data(diamonds)
 gm <- GlowMapper$new(xdim=2000, ydim = 2000, blend_mode = "screen", nthreads=nt)
