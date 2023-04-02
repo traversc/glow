@@ -4,6 +4,7 @@
 #if RCPP_PARALLEL_USE_TBB
 #include <tbb/task_arena.h>
 #endif
+
 using namespace Rcpp;
 using namespace RcppParallel;
 
@@ -349,10 +350,10 @@ Eigen::ArrayXXd c_map_light(NumericVector x, NumericVector y, NumericVector inte
 
 // https://en.wikipedia.org/wiki/Talk:Mollweide_projection
 // This formula has no citation but it seems to work
-inline double mollweide_newton_rhapson(const double lambda, const double phi) {
+inline double mollweide_newton_rhapson(const double lambda, const double phi, const size_t n_iter) {
   double theta = ( M_PI / 2.0 - pow(3.0 * M_PI / 8.0 * pow((M_PI/2.0 - abs(phi)),2.0), 1.0/3.0 ) ) * sgn(phi);
   if(phi > 1.570762) return theta;
-  for(size_t i=0; i<3; ++i) {
+  for(size_t i=0; i<n_iter; ++i) {
     theta -= (2.0 * theta + sin(2.0*theta) - M_PI * sin(phi)) / (2.0 + 2.0 * cos(2.0 * theta));
   }
   return theta;
@@ -365,9 +366,37 @@ DataFrame mollweide_projection(NumericVector latitude, NumericVector longitude, 
   for(size_t i=0; i<N; ++i) {
     double phi = latitude[i];
     double lambda = longitude[i];
-    double theta = mollweide_newton_rhapson(lambda, phi);
+    double theta = mollweide_newton_rhapson(lambda, phi, 3);
     x[i] = 2.0 * sqrt(2.0) / M_PI * (lambda-meridian) * cos(theta);
     y[i] = sqrt(2.0) * sin(theta);
   }
   return DataFrame::create(_["x"] = x, _["y"] = y);
 }
+
+// 1.886,-2.357,-0.328, 0.918
+// [[Rcpp::export(rng = false)]]
+DataFrame clifford_attractor(size_t n_iter, double A=1.886, double B=-2.357, double C=-0.328, double D=0.918, double x0=0.1, double y0=0) {
+  NumericVector x(n_iter);
+  NumericVector y(n_iter);
+  NumericVector angle(n_iter);
+  NumericVector distance(n_iter);
+  double * xp = REAL(x);
+  double * yp = REAL(y);
+  double * anglep = REAL(angle);
+  double * distancep = REAL(distance);
+  xp[0] = x0;
+  yp[0] = y0;
+  anglep[0] = 0;
+  distancep[0] = 0;
+  for (size_t i=1; i < n_iter; ++i) {
+    xp[i] = (sin(A*yp[i-1]) + C*cos(A*xp[i-1]));
+    yp[i] = (sin(B*xp[i-1]) + D*cos(B*yp[i-1]));
+    anglep[i] = atan2(yp[i], xp[i]);
+    double ydiff = yp[i] - yp[i-1];
+    double xdiff = xp[i] - xp[i-1];
+    distancep[i] = sqrt(ydiff*ydiff + xdiff*xdiff);
+  }
+  return DataFrame::create(_["x"]=x, _["y"]=y, _["angle"]=angle, _["distance"]=distance);
+}
+
+

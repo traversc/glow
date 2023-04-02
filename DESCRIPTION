@@ -1,7 +1,7 @@
 Package: glow
 Title: Make Plots that Glow
-Version: 0.10.1
-Date: 2020-8-25
+Version: 0.10.2
+Date: 2023-3-21
 Authors@R: c(
     person("Travers", "Ching", email = "traversc@gmail.com", role = c("aut", "cre", "cph"))
 	)
@@ -20,6 +20,6 @@ Depends:
 Suggests:
     knitr, rmarkdown, viridisLite, magick, qs
 VignetteBuilder: knitr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.2
 URL: https://github.com/traversc/glow
 BugReports: https://github.com/traversc/glow/issues

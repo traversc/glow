@@ -53,10 +53,11 @@ install:
 	R CMD INSTALL $(BUILD)
 
 vignette:
-	Rscript -e "rmarkdown::render(input='vignettes/vignette.rmd', output_format='all')"
-	mv vignettes/vignette.md README.md
+	Rscript -e "rmarkdown::render(input='vignettes/vignette.rmd', output_format='html_vignette')"
+	IS_GITHUB=Yes Rscript -e "rmarkdown::render(input='vignettes/vignette.rmd', output_file='../README.md', output_format=rmarkdown::github_document(html_preview=FALSE))"; unset IS_GITHUB
+	# mv vignettes/vignette.md README.md
 	# sed -r -i 's/\((.+?)\.png /\(tests\/\1\.png /g' README.md
-	perl -pi -e 's/\((.+?)\.png /\(tests\/\1\.png /g' README.md
+	# perl -pi -e 's/\((.+?)\.png /\(tests\/\1\.png /g' README.md
 
 test:
 	Rscript tests/tests.r

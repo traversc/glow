@@ -10,16 +10,49 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-[![Build Status](https://travis-ci.org/traversc/glow.svg)](https://travis-ci.org/traversc/glow) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/glow)](https://cran.r-project.org/package=glow) 
+```{r, setup, echo=FALSE}
+IS_GITHUB <- Sys.getenv("IS_GITHUB") != ""
+```
 
-<!-- [![CRAN\_Downloads\_Badge](https://cranlogs.r-pkg.org/badges/glow)](https://cran.r-project.org/package=glow) -->
-<!-- [![CRAN\_Downloads\_Total\_Badge](https://cranlogs.r-pkg.org/badges/grand-total/glow)](https://cran.r-project.org/package=glow) -->
+```{r results='asis', echo=FALSE, eval=IS_GITHUB}
+cat('
+[![CRAN-Status-Badge](http://www.r-pkg.org/badges/version/glow)](https://cran.r-project.org/package=glow) 
+')
+```
+
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/glow)](https://cran.r-project.org/package=glow) 
 
 *A package for making glow-y plots*
 
-The `glow` package is a framework for creating plots with glowing points as an alternative way of plotting large point clouds.  
+The `glow` package is a framework for creating plots with glowing points as an alternative way of plotting large point clouds.
 
 ## Gallery
+
+```{r results='asis', echo=FALSE, eval=IS_GITHUB}
+cat('
+<center>
+|Diamond Prices | Glow-y Spiral|
+|-|-|
+|![](vignettes/diamonds.png "diamonds.png"){height=240px} | ![](glow_spiral2.png "glow_spiral2.png"){height=240px}|
+
+| Milky Way Galaxy (6.1 million stars) |
+|-|
+| ![](vignettes/GAIA_galaxy_pseudocolor.png "GAIA_galaxy_pseudocolor.png"){height=300px} |
+
+| Airline Dataset (145 million points) | Methylation 450K Volcano Plot |
+|-|-|
+| ![](vignettes/airline_mt.png "airline_mt.png"){height=240px} | ![](volcano.png "volcano.png"){height=240px} |
+
+| U.S. Coronavirus Cases |
+|-|
+| ![](vignettes/US_coronavirus_8_19_2020.png "US_coronavirus_8_19_2020.png"){height=300px} |
+
+</center>
+')
+```
+
+```{r results='asis', echo=FALSE, eval=!IS_GITHUB}
+cat('
 <center>
 |Diamond Prices | Glow-y Spiral|
 |-|-|
@@ -38,6 +71,10 @@ The `glow` package is a framework for creating plots with glowing points as an a
 | ![](US_coronavirus_8_19_2020.png "US_coronavirus_8_19_2020.png"){height=300px} |
 
 </center>
+')
+```
+
+
 
 ## Installation
 ```{r eval=FALSE}
@@ -53,7 +90,7 @@ remotes::install_github("traversc/glow")
 * Very fast, can be faster than `geom_point` depending on settings
 * Multi-threaded
 * No loss of precision and individual point coordinates compared to binning procedures
-* Naturally works with larger-than-memory datasets (See "Airline" dataset in `tests/examples.r`)
+* Naturally works with larger-than-memory datasets (See "Airline" dataset in `inst/examples/examples.r`)
 
 ## Usage
 
@@ -71,11 +108,12 @@ library(viridisLite) # Magma color scale
 # Number of threads
 nt <- 4
 
-# Load the dataset
 data(diamonds)
-gm <- GlowMapper$new(xdim=2000, ydim = 2000, blend_mode = "screen", nthreads=nt)
+gm <- GlowMapper$new(xdim=800, ydim = 640, blend_mode = "screen", nthreads=nt)
 gm$map(x=diamonds$carat, y=diamonds$price, intensity=1, radius = .1)
 pd <- gm$output_dataframe(saturation = 1)
+
+# Dark color theme
 ggplot() + 
   geom_raster(data = pd, aes(x = pd$x, y = pd$y, fill = pd$value), show.legend = F) +
   scale_fill_gradientn(colors = additive_alpha(magma(12))) +
@@ -83,4 +121,29 @@ ggplot() +
   labs(x = "carat", y = "price") + 
   theme_night(bgcolor = magma(1))
 ```
+```{r results='asis', echo=FALSE}
+if(IS_GITHUB) {
+  cat('![](vignettes/diamonds_vignette_dark.png "diamonds_vignette_dark.png"){height=240px}')
+} else {
+  cat('![](diamonds_vignette_dark.png "diamonds_vignette_dark.png"){height=240px}')
+}
+```
 
+```{r eval=FALSE}
+# light color theme
+light_colors <- colorRampPalette(c("red", "darkorange2", "darkgoldenrod1", "gold1", "yellow2"))(144)
+ggplot() + 
+  geom_raster(data = pd, aes(x = pd$x, y = pd$y, fill = pd$value), show.legend = F) +
+  scale_fill_gradientn(colors = additive_alpha(light_colors)) +
+  coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
+  labs(x = "carat", y = "price") + 
+  theme_bw(base_size = 14)
+```
+
+```{r results='asis', echo=FALSE}
+if(IS_GITHUB) {
+  cat('![](vignettes/diamonds_vignette_light.png "diamonds_vignette_light.png"){height=240px}')
+} else {
+  cat('![](diamonds_vignette_light.png "diamonds_vignette_light.png"){height=240px}')
+}
+```

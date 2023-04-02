@@ -13,7 +13,7 @@ c_map_light <- function(x, y, intensity, radius, falloff_exponent, distance_expo
     .Call(`_glow_c_map_light`, x, y, intensity, radius, falloff_exponent, distance_exponent, xdim, ydim, xmin, xmax, ymin, ymax, background, blend_mode, nthreads)
 }
 
-mollweide_projection <- function(latitude, longitude, meridian) {
-    .Call(`_glow_mollweide_projection`, latitude, longitude, meridian)
+mollweide_projection <- function(latitude, longitude, meridian, n_iter = 3L) {
+    .Call(`_glow_mollweide_projection`, latitude, longitude, meridian, n_iter)
 }
 

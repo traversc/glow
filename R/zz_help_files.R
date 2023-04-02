@@ -57,6 +57,32 @@ NULL
 #' @name mollweide_projection
 NULL
 
+# clifford_attractor ###################################################
+
+#' clifford_attractor
+#' 
+#' A 2D chaotic attractor created by Clifford Pickover. 
+#' @usage mollweide_projection(n_iter, A=1.886, B=-2.357, C=-0.328, D=0.918, x0=0.1, y0=0)
+#' @param n_iter number of points to generate
+#' @param A see details
+#' @param B see details
+#' @param C see details
+#' @param D see details
+#' @param x0 The initial x-coordinate
+#' @param y0 The initial y-coordinate
+#' @return A dataframe containing X and Y coordinates of clifford attractor points, the angle and the distance between successive points. 
+#' @details 
+#' A clifford attractor is a 2D chaotic attractor given by the two equations:
+#' X[i+1] = sin(a*Y[i]) - c*cos(a*X[i])
+#' Y[i+1] = sin(b*X[i]) - d*cos(b*Y[i])
+#' https://en.wikipedia.org/wiki/List_of_chaotic_maps
+#' https://stackoverflow.com/q/51122970/2723734
+#' @examples
+#' clifford_attractor(1e6)
+#' @name clifford_attractor
+NULL
+
+
 # GlowMapper ###################################################
 
 #' GlowMapper
