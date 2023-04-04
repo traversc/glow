@@ -42,14 +42,11 @@ http://paulbourke.net/fractals/clifford/
 
 * GPS traces (Open Street Map)
 
+Open Data Commons Open Database License (ODbL)
+
+https://openstreetmap.org/copyright
+
 ~52 GB uncompressed text file
 
 https://hackernoon.com/drawing-2-7-billion-points-in-10s-ecc8c85ca8fa
 https://planet.osm.org/gps/
-
-Attribution must be to OpenStreetMap.
-
-Attribution must also make it clear that the data is available under the Open
-Database License. This may be done by making the text OpenStreetMap a link to
-openstreetmap.org/copyright, which has information about OpenStreetMaps data
-sources (which OpenStreetMap needs to credit) as well as the ODbL.

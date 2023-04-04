@@ -43,6 +43,16 @@ create_EBImage <- function(raw, bgcolor = "black", colormode = "Color") {
   EBImage::Image(image_array, colormode=colormode)
 }
 
+# ugly hack to trim plots with coord_cartesian
+trim_image <- function(file, bgcolor) {
+  # normalize input color
+  col <- col2rgb(bgcolor)
+  col <- rgb(red=col[1]/255,green=col[2]/255,blue=col[3]/255)
+  
+  cmd <- sprintf('convert %s -trim -bordercolor "%s" -border 20 %s', file, col, file)
+  system(cmd)
+}
+
 # Gaia Stars Galaxy #######################################################
 
 output_width = 1920*4
@@ -129,9 +139,7 @@ g <- ggplot() +
   labs(x = "Longitude", y = "latitude")
 
 ggsave(g, file=outfile, width=10, height=4, dpi=300)
-img <- magick::image_read(outfile)
-img <- magick::image_trim(img, fuzz = 50)
-magick::image_write(img, outfile)
+trim_image(outfile, "black")
 
 # Spiral ######################################
 
@@ -169,9 +177,7 @@ g <- ggplot(pd, aes(x = x, y = y, fill = rgb(r,g,b,a))) +
 
 outfile <- "plots/glow_spiral2.png"
 ggsave(g, file=outfile, width=10, height=4, dpi=300)
-img <- magick::image_read(outfile)
-img <- magick::image_trim(img, fuzz = 50)
-magick::image_write(img, outfile)
+trim_image(outfile, "black")
 
 # IRIS ##########################################
 
@@ -220,9 +226,7 @@ g <- ggplot() +
 
 outfile <- "plots/iris_example.png"
 ggsave(g, file=outfile, width=10, height=4, dpi=300)
-img <- magick::image_read(outfile)
-img <- magick::image_trim(img, fuzz = 50)
-magick::image_write(img, outfile)
+trim_image(outfile, "whitesmoke")
 
 # Diamonds ##########################################
 gm <- GlowMapper$new(xdim=2000, ydim = 2000, blend_mode = "screen", nthreads=nt)
@@ -233,20 +237,17 @@ g <- ggplot() +
   scale_fill_gradientn(colors = additive_alpha(cividis(12))) +
   coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
   labs(x = "carat", y = "price") + 
-  theme_night(bgcolor = cividis(1))
+  theme_night(bgcolor = cividis(12)[1])
 
 
 outfile <- "plots/diamonds.png"
 ggsave(g, file=outfile, width=10, height=4, dpi=300)
-img <- magick::image_read(outfile)
-img <- magick::image_trim(img, fuzz = 50)
-magick::image_write(img, outfile)
+trim_image(outfile, cividis(12)[1])
 
 # Diamonds vignette examples ##########################################
 library(glow)
 library(ggplot2)
 library(viridisLite) # Magma color scale
-
 
 data(diamonds)
 gm <- GlowMapper$new(xdim=800, ydim = 640, blend_mode = "screen", nthreads=nt)
@@ -259,13 +260,12 @@ g <- ggplot() +
   scale_fill_gradientn(colors = additive_alpha(magma(12))) +
   coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
   labs(x = "carat", y = "price") + 
-  theme_night(bgcolor = magma(1))
+  theme_night(bgcolor =  magma(12)[1])
 
 outfile <- "plots/diamonds_vignette_dark.png"
 ggsave(g, file=outfile, width=10, height=4, dpi=96)
-img <- magick::image_read(outfile)
-img <- magick::image_trim(img, fuzz = 50)
-magick::image_write(img, outfile)
+trim_image(outfile, magma(12)[1])
+
 
 # light color theme
 light_colors <- colorRampPalette(c("red", "darkorange2", "darkgoldenrod1", "gold1", "yellow2"))(144)
@@ -278,9 +278,7 @@ g <- ggplot() +
 
 outfile <- "plots/diamonds_vignette_light.png"
 ggsave(g, file=outfile, width=10, height=4, dpi=96)
-img <- magick::image_read(outfile)
-img <- magick::image_trim(img, fuzz = 50)
-magick::image_write(img, outfile)
+trim_image(outfile, "white")
 
 # Volcano ##########################################
 
@@ -297,15 +295,13 @@ g <- ggplot(pd, aes(x=x, y=y, fill = value)) +
   geom_raster(show.legend=F) + 
   geom_hline(yintercept = -log10(adj_pval_threshold), lty=2, color = "red") + 
   labs(x = "log Fold Change", y = "-log10 P-value") +
-  scale_fill_gradientn(colors = additive_alpha(magma(12))) + 
+  scale_fill_gradientn(colors = additive_alpha(light_heat_colors(12))) + 
   coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
-  theme_night(bgcolor = magma(12)[1])
+  theme_bw(base_size=14)
 
-outfile <- "plots/volcano.png"
+outfile <- "plots/volcano_white_bg.png"
 ggsave(g, file=outfile, width=10, height=4, dpi=300)
-img <- magick::image_read(outfile)
-img <- magick::image_trim(img, fuzz = 50)
-magick::image_write(img, outfile)
+trim_image(outfile,  "white")
 
 
 # Airline ###################################
@@ -342,9 +338,7 @@ g <- ggplot(pd, aes(x=x, y=y, fill = value)) +
 
 outfile <- "plots/airline_mt.png"
 ggsave(g, file=outfile, width=10, height=4, dpi=300)
-img <- magick::image_read(outfile)
-img <- magick::image_trim(img, fuzz = 50)
-magick::image_write(img, outfile)
+trim_image(outfile,  mako(12)[1])
 
 # Other interesting datasets ###################################
 

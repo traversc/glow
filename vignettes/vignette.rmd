@@ -31,15 +31,15 @@ The `glow` package is a framework for creating plots with glowing points as an a
 ```{r results='asis', echo=FALSE}
 output <- '
 <center>
-|Methylation 450K Volcano Plot | Glow-y Spiral|
+|Methylation 450K Volcano Plot |Diamonds |
 |-|-|
-|![](vignettes/volcano.png "volcano.png"){height=240px} | ![](vignettes/glow_spiral2.png "glow_spiral2.png"){height=240px}|
+|![](vignettes/volcano_white_bg.png "volcano_white_bg.png"){height=240px} |![](vignettes/diamonds.png "diamonds.png"){height=240px} |
 
 | Milky Way Galaxy (6.1 million stars) |
 |-|
 | ![](vignettes/GAIA_galaxy_pseudocolor.png "GAIA_galaxy_pseudocolor.png"){height=300px} |
 
-| [OpenStreetMap](openstreetmap.org/copyright) GPS traces (2.8 billion points) |
+| OpenStreetMap GPS traces (2.8 billion points) |
 |-|
 | ![](vignettes/gps_trace_8K_downsample.png "gps_trace_8K_downsample.png"){height=300px} |
 
@@ -47,9 +47,9 @@ output <- '
 |-|
 | ![](vignettes/clifford_distance_inverse_viridis_50_downsample.png "clifford_distance_inverse_viridis_50_downsample.png"){height=300px} |
 
-| Airline Dataset (145 million points) | Diamonds |
+| Airline Dataset (145 million points) | Glow-y Spiral |
 |-|-|
-| ![](vignettes/airline_mt.png "airline_mt.png"){height=240px} | ![](vignettes/diamonds.png "diamonds.png"){height=240px} |
+| ![](vignettes/airline_mt.png "airline_mt.png"){height=240px} | ![](vignettes/glow_spiral2.png "glow_spiral2.png"){height=240px} |
 
 | U.S. Coronavirus Cases (2021) |
 |-|
@@ -84,7 +84,7 @@ Creating a glow plot is done through the `GlowMapper` or `GlowMapper4` classes, 
 
 The class function `$map` creates a raster that can be plotted with `ggplot`'s `geom_raster` or output directly using the `EBImage` library.  
 
-See the help files and `inst/examples/` for more information and examples. 
+See the help files and `inst/examples/notes.txt` for more information on each example. 
 
 ### ggplot example using the diamonds dataset
 
@@ -107,7 +107,7 @@ ggplot() +
   scale_fill_gradientn(colors = additive_alpha(magma(12))) +
   coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
   labs(x = "carat", y = "price") + 
-  theme_night(bgcolor = magma(1))
+  theme_night(bgcolor = magma(12)[1])
 ```
 ```{r results='asis', echo=FALSE}
 if(IS_GITHUB) {

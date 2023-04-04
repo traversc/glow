@@ -49,7 +49,7 @@ qsave(stars2, "plot_data/gaia_stars.qs", preset = "custom", algorithm = "zstd", 
 cov_cases <- fread("https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_confirmed_usafacts.csv", data.table=F)
 
 cov_cases <- cov_cases %>% 
-  dplyr::transmute(state_abbr = State, name = stringr::str_trim(gsub(" County", "" ,`County Name`)), total = `2021-12-31`)
+  dplyr::transmute(state_abbr = State, name = stringr::str_trim(gsub(" County", "" ,`County Name`)), total = `2021-08-16`)
 
 plot_states <- setdiff(USAboundaries::us_states()$state_name, c("Hawaii", "Northern Mariana Islands", "Puerto Rico", "Alaska", "American Samoa", "Guam", "Virgin Islands"))
 county <- us_counties(map_date = NULL, resolution = "high", states = plot_states)

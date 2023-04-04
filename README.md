@@ -14,25 +14,25 @@ as an alternative way of plotting large point clouds.
 
 <center>
 
-| Methylation 450K Volcano Plot            | Glow-y Spiral                                      |
-| ---------------------------------------- | -------------------------------------------------- |
-| ![](vignettes/volcano.png "volcano.png") | ![](vignettes/glow_spiral2.png "glow_spiral2.png") |
+| Methylation 450K Volcano Plot                              | Diamonds                                   |
+| ---------------------------------------------------------- | ------------------------------------------ |
+| ![](vignettes/volcano_white_bg.png "volcano_white_bg.png") | ![](vignettes/diamonds.png "diamonds.png") |
 
 | Milky Way Galaxy (6.1 million stars)                                     |
 | ------------------------------------------------------------------------ |
 | ![](vignettes/GAIA_galaxy_pseudocolor.png "GAIA_galaxy_pseudocolor.png") |
 
-| [OpenStreetMap](openstreetmap.org/copyright) GPS traces (2.8 billion points) |
-| ---------------------------------------------------------------------------- |
-| ![](vignettes/gps_trace_8K_downsample.png "gps_trace_8K_downsample.png")     |
+| OpenStreetMap GPS traces (2.8 billion points)                            |
+| ------------------------------------------------------------------------ |
+| ![](vignettes/gps_trace_8K_downsample.png "gps_trace_8K_downsample.png") |
 
 | Clifford strange attractor (1 billion points)                                                                            |
 | ------------------------------------------------------------------------------------------------------------------------ |
 | ![](vignettes/clifford_distance_inverse_viridis_50_downsample.png "clifford_distance_inverse_viridis_50_downsample.png") |
 
-| Airline Dataset (145 million points)           | Diamonds                                   |
-| ---------------------------------------------- | ------------------------------------------ |
-| ![](vignettes/airline_mt.png "airline_mt.png") | ![](vignettes/diamonds.png "diamonds.png") |
+| Airline Dataset (145 million points)           | Glow-y Spiral                                      |
+| ---------------------------------------------- | -------------------------------------------------- |
+| ![](vignettes/airline_mt.png "airline_mt.png") | ![](vignettes/glow_spiral2.png "glow_spiral2.png") |
 
 | U.S. Coronavirus Cases (2021)                                    |
 | ---------------------------------------------------------------- |
@@ -88,7 +88,7 @@ ggplot() +
   scale_fill_gradientn(colors = additive_alpha(magma(12))) +
   coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
   labs(x = "carat", y = "price") + 
-  theme_night(bgcolor = magma(1))
+  theme_night(bgcolor = magma(12)[1])
 ```
 
 ![](vignettes/diamonds_vignette_dark.png "diamonds_vignette_dark.png")
