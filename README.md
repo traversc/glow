@@ -23,13 +23,13 @@ as an alternative way of plotting large point clouds.
 | ------------------------------------------------------------------------ |
 | ![](vignettes/GAIA_galaxy_pseudocolor.png "GAIA_galaxy_pseudocolor.png") |
 
-| OpenStreetMap GPS traces (2.8 billion points)                            |
-| ------------------------------------------------------------------------ |
-| ![](vignettes/gps_trace_8K_downsample.png "gps_trace_8K_downsample.png") |
+| OpenStreetMap GPS traces (2.8 billion points)      |
+| -------------------------------------------------- |
+| ![](vignettes/gps_trace_8K.png "gps_trace_8K.png") |
 
-| Clifford strange attractor (1 billion points)                                                                            |
-| ------------------------------------------------------------------------------------------------------------------------ |
-| ![](vignettes/clifford_distance_inverse_viridis_50_downsample.png "clifford_distance_inverse_viridis_50_downsample.png") |
+| Clifford strange attractor (1 billion points)                                                      |
+| -------------------------------------------------------------------------------------------------- |
+| ![](vignettes/clifford_distance_inverse_viridis_50.png "clifford_distance_inverse_viridis_50.png") |
 
 | Airline Dataset (145 million points)           | Glow-y Spiral                                      |
 | ---------------------------------------------- | -------------------------------------------------- |
