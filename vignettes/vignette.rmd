@@ -42,11 +42,11 @@ output <- '
 
 | OpenStreetMap GPS traces (2.8 billion points) |
 |-|
-| ![](vignettes/gps_trace_8K_downsample.png "gps_trace_8K_downsample.png"){height=300px} |
+| ![](vignettes/gps_trace_8K.png "gps_trace_8K.png"){height=300px} |
 
 | Clifford strange attractor (1 billion points) |
 |-|
-| ![](vignettes/clifford_distance_inverse_viridis_50_downsample.png "clifford_distance_inverse_viridis_50_downsample.png"){height=300px} |
+| ![](vignettes/clifford_distance_inverse_viridis_50.png "clifford_distance_inverse_viridis_50.png"){height=300px} |
 
 | Airline Dataset (145 million points) | Glow-y Spiral |
 |-|-|
