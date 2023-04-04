@@ -5,7 +5,8 @@ glow
 [![CRAN-Status-Badge](http://www.r-pkg.org/badges/version/glow)](https://cran.r-project.org/package=glow)
 [![CRAN-Downloads-Badge](https://cranlogs.r-pkg.org/badges/glow)](https://cran.r-project.org/package=glow)
 [![CRAN-Downloads-Total-Badge](https://cranlogs.r-pkg.org/badges/grand-total/glow)](https://cran.r-project.org/package=glow)
-*A package for making glow-y plots*
+
+### A package for making glow-y plots
 
 The `glow` package is a framework for creating plots with glowing points
 as an alternative way of plotting large point clouds.
@@ -64,8 +65,8 @@ classes, which utilize the `R6` class framework.
 The class function `$map` creates a raster that can be plotted with
 `ggplot`’s `geom_raster` or output directly using the `EBImage` library.
 
-See the help files and `inst/examples/` for more information and
-examples.
+See the help files and `inst/examples/notes.txt` for more information on
+each example.
 
 ### ggplot example using the diamonds dataset
 

@@ -22,7 +22,8 @@ cat('
 [![CRAN-Downloads-Total-Badge](https://cranlogs.r-pkg.org/badges/grand-total/glow)](https://cran.r-project.org/package=glow)
 ')
 ```
-*A package for making glow-y plots*
+
+### A package for making glow-y plots
 
 The `glow` package is a framework for creating plots with glowing points as an alternative way of plotting large point clouds.
 
