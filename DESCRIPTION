@@ -10,7 +10,6 @@ Description: Provides a framework for creating plots with glowing points.
 License: GPL-3
 Biarch: true
 Encoding: UTF-8
-SystemRequirements: C++11
 LinkingTo: 
     Rcpp, RcppEigen, RcppParallel
 Imports: 
