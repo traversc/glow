@@ -1,7 +1,7 @@
 Package: glow
 Title: Make Plots that Glow
-Version: 0.10.2
-Date: 2023-3-21
+Version: 0.11.0
+Date: 2023-4-4
 Authors@R: c(
     person("Travers", "Ching", email = "traversc@gmail.com", role = c("aut", "cre", "cph"))
 	)
@@ -14,11 +14,11 @@ SystemRequirements: C++11
 LinkingTo: 
     Rcpp, RcppEigen, RcppParallel
 Imports: 
-    Rcpp, RcppParallel, scales, R6
+    Rcpp, RcppParallel (>= 5.1.2), R6
 Depends:
     ggplot2
 Suggests:
-    knitr, rmarkdown, viridisLite, magick, qs
+    knitr, rmarkdown, viridisLite, magick, EBImage, qs
 VignetteBuilder: knitr
 RoxygenNote: 7.1.2
 URL: https://github.com/traversc/glow

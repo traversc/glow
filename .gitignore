@@ -25,3 +25,5 @@ autom4te.cache/*
 /src/.vscode
 src/Makevars
 *.qs
+inst/examples/plots/*
+inst/examples/plot_data/*

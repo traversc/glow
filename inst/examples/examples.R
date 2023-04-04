@@ -4,9 +4,12 @@
 # U.S. COVID cases
 # Volcano plot
 # Iris dataset
-# Fractal (TO DO)
 # Spiral
 
+# All examples in this script can be easily run on a desktop computer
+# Just downscale the output resolution
+
+# See examples_parse_data.R for data pre-processing
 
 library(dplyr)
 library(data.table)
@@ -15,16 +18,36 @@ library(qs)
 library(glow)
 library(ggplot2)
 library(sf)
+library(EBImage)
 library(viridisLite)
-library(magick)
 
-# result images are compressed with https://tinypng.com/ for vignettes
-
-nt <- 8
+nt <- 8 # number of threads to use
 
 outdir <- "plots"
 dir.create(outdir, showWarnings=FALSE)
+
+create_EBImage <- function(raw, bgcolor = "black", colormode = "Color") {
+  bgcolor_rgb <- as.vector(col2rgb(bgcolor))
+  if(colormode == "Color") {
+    image_array <- array(0, dim=c(dim(raw[[1]]), 3))
+    print(dim(image_array))
+    image_array[,,1] <- pd[[1]]*pd[[4]] + bgcolor_rgb[1] * (1-pd[[4]])
+    image_array[,,2] <- pd[[2]]*pd[[4]] + bgcolor_rgb[2] * (1-pd[[4]])
+    image_array[,,3] <- pd[[3]]*pd[[4]] + bgcolor_rgb[3] * (1-pd[[4]])
+  } else if(colormode == "Grayscale") {
+    image_array <- array(0, dim=c(dim(raw), 1))
+    image_array <- raw
+  } else {
+    stop("colormode must be Color or Grayscale")
+  }
+  EBImage::Image(image_array, colormode=colormode)
+}
+
 # Gaia Stars Galaxy #######################################################
+
+output_width = 1920*4
+output_height = 1080*4
+outfile <- "plots/GAIA_galaxy_pseudocolor.png"
 
 stars <- qread("plot_data/gaia_stars.qs")
 
@@ -50,7 +73,7 @@ l <- atan2(r_gal[,2], r_gal[,1])
 b <- atan2(r_gal[,3], sqrt(r_gal[,1]^2 + r_gal[,2]^2))
 
 # Transform to mollweide projection
-proj <- mollweide_projection(latitude = b, longitude = l, meridian = 0, n_iter = 100)
+proj <- mollweide_projection(latitude = b, longitude = l, meridian = 0)
 
 ramp <- colorRamp(c("red", "#555555", "blue"))
 color <- 1 / stars$astrometric_pseudo_colour
@@ -60,23 +83,28 @@ color <- pmin(pmax(color, q5), q95)
 color <- color - min(color)
 color <- ramp(color / max(color))/255
 
-gm <- GlowMapper4$new(xdim=3000, ydim = 1500, blend_mode = "additive", nthreads=nt)
+gm <- GlowMapper4$new(xdim=output_width, ydim=output_height, blend_mode = "additive", nthreads=nt)
 gm$map(x=proj$x, y=proj$y, r = stars$lum_val*color[,1]/1e3,
        g = stars$lum_val*color[,2]/1e3, b = stars$lum_val*color[,3]/1e3, radius = .05, distance_exponent = 2)
-pd <- gm$output_dataframe(saturation = 1)
-g <- ggplot(pd, aes(x = x, y = y, fill = rgb(r,g,b,a))) + geom_raster(show.legend = F) +
-  scale_fill_identity() +
-  coord_fixed(ratio = gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim(), expand = T) + 
-  theme_night(bgcolor = "black") + labs(x = "Right ascension", y = "Declination")
 
-outfile <- "plots/GAIA_galaxy_pseudocolor.png"
-ggsave(g, file=outfile, width=10, height=4, dpi=300)
-img <- magick::image_read(outfile)
-img <- magick::image_trim(img, fuzz = 50)
-magick::image_write(img, outfile)
+pd <- gm$output_raw(saturation = 1)
+img <- create_EBImage(pd, "black")
+writeImage(img, "plots/GAIA_galaxy_pseudocolor.png")
+
+# pd <- gm$output_dataframe(saturation = 1)
+# g <- ggplot(pd, aes(x = x, y = y, fill = rgb(r,g,b,a))) + geom_raster(show.legend = F) +
+#   scale_fill_identity() +
+#   coord_fixed(ratio = gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim(), expand = T) + 
+#   theme_night(bgcolor = "black") + labs(x = "Right ascension", y = "Declination")
+# ggsave(g, file=outfile, width=10, dpi=300)
+# img <- magick::image_read(outfile)
+# img <- magick::image_trim(img, fuzz = 50)
+# magick::image_write(img, outfile)
 
 
 # COVID ########################################################################
+
+outfile <- "plots/US_coronavirus_2021.png"
 
 cov_cases <- qread("plot_data/covid_confirmed_usafacts.qs")
 centroids <- cov_cases$centroids
@@ -96,11 +124,10 @@ g <- ggplot() +
   # geom_point(data = centroids, aes(x = X, y = Y, color = log10(total))) + 
   # scale_color_viridis_c() + 
   geom_raster(data = pd, aes(x = pd$x, y = pd$y, fill = pd$value), show.legend = F) +
-  scale_fill_gradientn(colors = additive_alpha(magma(12))) +
+  scale_fill_gradientn(colors = additive_alpha(cividis(12))) +
   theme_night() + 
   labs(x = "Longitude", y = "latitude")
 
-outfile <- "plots/US_coronavirus_8_19_2020.png"
 ggsave(g, file=outfile, width=10, height=4, dpi=300)
 img <- magick::image_read(outfile)
 img <- magick::image_trim(img, fuzz = 50)
@@ -169,12 +196,12 @@ lg <- df %>% dplyr::select(Species, color, exponent, radius) %>%
          radius = radius * 1.2,
          text = c("Setosa", "Versicolor", "Virginica"))
 
-gm <- GlowMapper4$new(xdim=2000, ydim=1600, background_color = c(0,0,0,0), blend_mode = "screen", nthreads=nt)
+gm <- GlowMapper4$new(xdim=1920, ydim=1440, background_color = c(0,0,0,0), blend_mode = "screen", nthreads=nt)
 gm$map(x=df$Petal.Width, y=df$Sepal.Width, 
        color = df$color, radius = df$radius, distance_exponent = df$exponent)
 pd <- gm$output_dataframe(saturation = 1)
 
-l <- GlowMapper4$new(xdim=2000, ydim=1600, background_color = c(0,0,0,0), blend_mode = "screen", nthreads=nt)
+l <- GlowMapper4$new(xdim=1920, ydim=1440, background_color = c(0,0,0,0), blend_mode = "screen", nthreads=nt)
 l$map(x=lg$x, y=lg$y, 
        color = lg$color, radius = lg$radius, distance_exponent = lg$exponent, xlimits = gm$xlim(), ylimits = gm$ylim())
 ld <- l$output_dataframe(saturation = 1)
@@ -201,17 +228,16 @@ magick::image_write(img, outfile)
 gm <- GlowMapper$new(xdim=2000, ydim = 2000, blend_mode = "screen", nthreads=nt)
 gm$map(x=diamonds$carat, y=diamonds$price, intensity=0.5, radius = .1)
 pd <- gm$output_dataframe(saturation = 1)
-light_colors <- colorRampPalette(c("red", "darkorange2", "darkgoldenrod1", "gold1", "yellow2"))(144)
-gglow <- ggplot() + 
+g <- ggplot() + 
   geom_raster(data = pd, aes(x = pd$x, y = pd$y, fill = pd$value), show.legend = F) +
-  scale_fill_gradientn(colors = additive_alpha(light_colors)) +
+  scale_fill_gradientn(colors = additive_alpha(cividis(12))) +
   coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
   labs(x = "carat", y = "price") + 
-  theme_bw(base_size = 14)
+  theme_night(bgcolor = cividis(1))
 
 
 outfile <- "plots/diamonds.png"
-ggsave(gglow, file=outfile, width=10, height=4, dpi=300)
+ggsave(g, file=outfile, width=10, height=4, dpi=300)
 img <- magick::image_read(outfile)
 img <- magick::image_trim(img, fuzz = 50)
 magick::image_write(img, outfile)
@@ -235,7 +261,7 @@ g <- ggplot() +
   labs(x = "carat", y = "price") + 
   theme_night(bgcolor = magma(1))
 
-outfile <- "diamonds_vignette_dark.png"
+outfile <- "plots/diamonds_vignette_dark.png"
 ggsave(g, file=outfile, width=10, height=4, dpi=96)
 img <- magick::image_read(outfile)
 img <- magick::image_trim(img, fuzz = 50)
@@ -250,7 +276,7 @@ g <- ggplot() +
   labs(x = "carat", y = "price") + 
   theme_bw(base_size = 14)
 
-outfile <- "diamonds_vignette_light.png"
+outfile <- "plots/diamonds_vignette_light.png"
 ggsave(g, file=outfile, width=10, height=4, dpi=96)
 img <- magick::image_read(outfile)
 img <- magick::image_trim(img, fuzz = 50)
@@ -258,7 +284,7 @@ magick::image_write(img, outfile)
 
 # Volcano ##########################################
 
-
+DMPs <- qread("plot_data/methylation_data.qs")
 
 adj_pval_threshold <- DMPs %>% filter(adj.P.Val < 0.05) %>%
   pull(P.Value) %>% max
@@ -275,7 +301,7 @@ g <- ggplot(pd, aes(x=x, y=y, fill = value)) +
   coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
   theme_night(bgcolor = magma(12)[1])
 
-outfile <- "volcano.png"
+outfile <- "plots/volcano.png"
 ggsave(g, file=outfile, width=10, height=4, dpi=300)
 img <- magick::image_read(outfile)
 img <- magick::image_trim(img, fuzz = 50)
@@ -286,20 +312,7 @@ magick::image_write(img, outfile)
 # https://www.r-bloggers.com/visualize-large-data-sets-with-the-bigvis-package/
 ## wget https://packages.revolutionanalytics.com/datasets/AirOnTime87to12/AirOnTimeCSV.zip .
 
-# run once
-if(F) {
-files <- list.files("~/N/R_stuff/AirOnTimeCSV/", full.names=T)
-air <- lapply(1:length(files), function(i) {
-  print(i)
-  z <- fread(files[i], select = c("DEP_DELAY", "ARR_DELAY")) %>% 
-    filter(complete.cases(.))
-  file.remove(files[i])
-  return(z)
-})
-qsave(air, file="~/N/R_stuff/AirOnTime.qs", preset = "custom", algorithm = "zstd", compress_level = 12, nthreads=nt)
-}
-
-air <- qread("~/N/R_stuff/AirOnTime.qs", nthreads=nt)
+air <- qread("plot_data/AirOnTime.qs", nthreads=nt)
 
 temp <- rbindlist(air)
 qlo1 <- temp$ARR_DELAY %>% quantile(0.0025)
@@ -322,12 +335,12 @@ pd <- gm$output_dataframe()
 
 g <- ggplot(pd, aes(x=x, y=y, fill = value)) + 
   geom_raster(show.legend=F) + 
-  scale_fill_gradientn(colors = additive_alpha(magma(12))) + 
+  scale_fill_gradientn(colors = additive_alpha(mako(12))) + 
   coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
   labs(x = "Departure Delay (minutes)", y = "Arrival Delay (minutes)") +
-  theme_night(bgcolor = magma(12)[1])
+  theme_night(bgcolor = mako(12)[1])
 
-outfile <- "airline_mt.png"
+outfile <- "plots/airline_mt.png"
 ggsave(g, file=outfile, width=10, height=4, dpi=300)
 img <- magick::image_read(outfile)
 img <- magick::image_trim(img, fuzz = 50)
@@ -335,5 +348,4 @@ magick::image_write(img, outfile)
 
 # Other interesting datasets ###################################
 
-# https://hackernoon.com/drawing-2-7-billion-points-in-10s-ecc8c85ca8fa
-# https://stackoverflow.com/questions/51122970/efficiently-plotting-hundreds-of-millions-of-points-in-r
+# ??

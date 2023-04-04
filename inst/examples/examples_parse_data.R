@@ -1,32 +1,26 @@
-# Glow plot examples
-# 
-# Milky way galaxy
-# U.S. COVID cases
-# Volcano plot
-# Iris dataset
-# Fractal (TO DO)
-# Spiral
+# This script parses data for plots to put them into a more manageable form
 
 library(glow)
 library(dplyr)
 library(data.table)
 library(arrow)
-library(duckdb)
 library(qs)
 library(stringr)
 
 # COVID example
 library(sf)
-library(USAboundaries) # install.packages("USAboundariesData", repos = "https://ropensci.r-universe.dev", type = "source")
-library(USAboundariesData)
+library(USAboundaries) # install.packages("USAboundaries", repos = "https://ropensci.r-universe.dev", type = "source")
+library(USAboundariesData) # install.packages("USAboundariesData", repos = "https://ropensci.r-universe.dev", type = "source")
 
 # Volcano
-library(minfi)
+library(minfi) # BiocManager::install(c("minfi", "methylationArrayAnalysis"))
 library(methylationArrayAnalysis)
 
 tempdir <- tempdir()
 outdir <- "plot_data"
 dir.create(outdir, showWarnings=FALSE)
+
+nt <- 8
 
 # Galaxy #######################################################################
 
@@ -42,7 +36,7 @@ files <- c("http://cdn.gea.esac.esa.int/Gaia/gdr2/gaia_source_with_rv/csv/GaiaSo
            "http://cdn.gea.esac.esa.int/Gaia/gdr2/gaia_source_with_rv/csv/GaiaSource_6714230465835878784_6917528443525529728.csv.gz")
 
 stars <- lapply(files, function(f) {
-  arrow::read_csv_arrow(f, col_select = c("parallax", "dec", "ra", "astrometric_pseudo_colour", "lum_val"))
+  data.table::fread(f, select = c("parallax", "dec", "ra", "astrometric_pseudo_colour", "lum_val"))
 }) %>% rbindlist %>% as.data.frame
 stars2 <- stars[complete.cases(stars),]
 stars2 <- stars2 %>% arrange_all
@@ -55,7 +49,7 @@ qsave(stars2, "plot_data/gaia_stars.qs", preset = "custom", algorithm = "zstd", 
 cov_cases <- fread("https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_confirmed_usafacts.csv", data.table=F)
 
 cov_cases <- cov_cases %>% 
-  dplyr::transmute(state_abbr = State, name = stringr::str_trim(gsub(" County", "" ,`County Name`)), total = `2020-08-21`)
+  dplyr::transmute(state_abbr = State, name = stringr::str_trim(gsub(" County", "" ,`County Name`)), total = `2021-12-31`)
 
 plot_states <- setdiff(USAboundaries::us_states()$state_name, c("Hawaii", "Northern Mariana Islands", "Puerto Rico", "Alaska", "American Samoa", "Guam", "Virgin Islands"))
 county <- us_counties(map_date = NULL, resolution = "high", states = plot_states)
@@ -63,7 +57,7 @@ state <- us_states(map_date = NULL, resolution = "high", states = plot_states)
 
 centroids <- st_centroid(county)
 centroids <- cbind(centroids, st_coordinates(centroids$geometry))
-centroids <- left_join(centroids, cov_cases, by = "name")
+centroids <- left_join(centroids, cov_cases, by = c("name", "state_abbr"))
 centroids$total[is.na(centroids$total)] <- 0
 centroids <- filter(centroids, total > 0)
 
@@ -85,7 +79,7 @@ keep <- colMeans(detP) < 0.05
 rgSet <- rgSet[,keep]
 targets <- targets[keep,]
 detP <- detP[,keep]
-mSetSq <- preprocessQuantile(rgSet)
+mSetSq <- preprocessQuantile(rgSet, quantileNormalize=FALSE)
 detP <- detP[match(featureNames(mSetSq),rownames(detP)),]
 keep <- rowSums(detP < 0.01) == ncol(mSetSq)
 mSetSqFlt <- mSetSq[keep,]
@@ -106,49 +100,36 @@ DMPs <- topTable(fit2, num=Inf, coef=1, genelist=ann450kSub)
 
 
 DMPs <- DMPs %>% dplyr::select(logFC, P.Value, adj.P.Val)
-colnames(DMPs) <- NULL
+rownames(DMPs) <- NULL
 
 qsave(DMPs, file = "plot_data/methylation_data.qs", preset = "custom", algorithm = "zstd", compress_level = 22)
-
-
-
 
 # Airline ######################################################################
 # https://www.r-bloggers.com/visualize-large-data-sets-with-the-bigvis-package/
 
 # revolutionanalytics SSL cert expired
-system(sprintf("wget -v --no-check-certificate https://packages.revolutionanalytics.com/datasets/AirOnTime87to12/AirOnTimeCSV.zip %s", tempdir))
+# Some versions of zip don't work on < 4GB zip files
+system(sprintf("wget -v --no-check-certificate https://packages.revolutionanalytics.com/datasets/AirOnTime87to12/AirOnTimeCSV.zip -P %s", tempdir))
+system(sprintf("7za x %s/AirOnTimeCSV.zip -o%s/AirOnTimeCSV", tempdir, tempdir))
 
-
-files <- list.files(paste0(tempdir, "/AirOnTimeCSV/"), full.names=T)
+files <- list.files(paste0(tempdir, "/AirOnTimeCSV/AirOnTimeCSV"), full.names=T)
 air <- lapply(1:length(files), function(i) {
   print(i)
   z <- fread(files[i], select = c("DEP_DELAY", "ARR_DELAY")) %>% 
     filter(complete.cases(.))
-  file.remove(files[i])
   return(z)
 })
-qsave(air, file="~/N/R_stuff/AirOnTime.qs", preset = "custom", algorithm = "zstd", compress_level = 12, nthreads=nt)
-
-air <- qread("~/N/R_stuff/AirOnTime.qs", nthreads=nt)
-
-temp <- rbindlist(air)
-qlo1 <- temp$ARR_DELAY %>% quantile(0.0025)
-qhi1 <- temp$ARR_DELAY %>% quantile(0.9975)
-qlo2 <- temp$DEP_DELAY %>% quantile(0.0025)
-qhi2 <- temp$DEP_DELAY %>% quantile(0.9975)
-rm(temp)
-
-gm <- GlowMapper$new(xdim = 2000, ydim = 2000, blend_mode = "screen", nthreads=nt)
-
+qsave(air, file="plot_data/AirOnTime.qs", preset = "custom", algorithm = "zstd", compress_level = 22, nthreads=nt)
 
 # GPS traces ######################################################################
-
 # https://planet.osm.org/gps/
 
-# Attribution must be to OpenStreetMap.
-# 
-# Attribution must also make it clear that the data is available under the Open 
-# Database License. This may be done by making the text OpenStreetMap a link to 
-# openstreetmap.org/copyright, which has information about OpenStreetMaps data 
-# sources (which OpenStreetMap needs to credit) as well as the ODbL.
+system(sprintf("wget -v https://planet.osm.org/gps/simple-gps-points-120312.txt.xz -P %s", tempdir))
+system(sprintf("unxz %s/simple-gps-points-120312.txt.xz", tempdir))
+
+gps <- data.table::fread(sprintf("%s/simple-gps-points-120312.txt", tempdir), header=FALSE, data.table=FALSE)
+gps <- list(latitude = gps[[1]], longitude = gps[[2]]) # Long dataframes not supported in R as of 4.2.3
+
+qsave(gps, file="plot_data/simple-gps-points.qs", preset = "custom", algorithm = "zstd", compress_level = 22, nthreads=nt)
+
+

@@ -14,6 +14,10 @@ theme_night <- function (bgcolor = "black", base_size = 14, base_family = ""){
     )
 }
 
+light_heat_colors <- function(...) {
+  colorRampPalette(c("red", "darkorange2", "darkgoldenrod1", "gold1", "yellow2"))(...)
+}
+
 additive_alpha <- function(colors) {
   s <- seq(2, length(colors))
   x <- t(col2rgb(colors, alpha=F))/255
@@ -25,6 +29,19 @@ additive_alpha <- function(colors) {
   x <- pmax(x, 0)
   x <- cbind(x, alpha = c(0,cmax[-1]))
   rgb(x[,1], x[,2], x[,3], x[,4])
+}
+
+circular_palette <- function(n, pal_function=rainbow, invert=FALSE, ...) {
+  if(n %% 2 != 0) stop("Number of colors must be divisible by 2")
+  pal <- pal_function(n/2, ...)
+  if(invert) pal <- rev(pal)
+  c(pal, rev(pal))
+}
+
+map_colors <- function(colors, x, min_limit=NULL, max_limit=NULL) {
+  if(is.null(min_limit)) min_limit <- min(x)
+  if(is.null(max_limit)) max_limit <- max(x)
+  colors[findInterval(x, seq(min_limit, max_limit, length.out = length(colors) + 1), all.inside = TRUE)]
 }
 
 

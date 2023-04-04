@@ -69,15 +69,30 @@ BEGIN_RCPP
 END_RCPP
 }
 // mollweide_projection
-DataFrame mollweide_projection(NumericVector latitude, NumericVector longitude, const double meridian, const size_t n_iter);
-RcppExport SEXP _glow_mollweide_projection(SEXP latitudeSEXP, SEXP longitudeSEXP, SEXP meridianSEXP, SEXP n_iterSEXP) {
+DataFrame mollweide_projection(NumericVector latitude, NumericVector longitude, const double meridian);
+RcppExport SEXP _glow_mollweide_projection(SEXP latitudeSEXP, SEXP longitudeSEXP, SEXP meridianSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< NumericVector >::type latitude(latitudeSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type longitude(longitudeSEXP);
     Rcpp::traits::input_parameter< const double >::type meridian(meridianSEXP);
-    Rcpp::traits::input_parameter< const size_t >::type n_iter(n_iterSEXP);
-    rcpp_result_gen = Rcpp::wrap(mollweide_projection(latitude, longitude, meridian, n_iter));
+    rcpp_result_gen = Rcpp::wrap(mollweide_projection(latitude, longitude, meridian));
+    return rcpp_result_gen;
+END_RCPP
+}
+// clifford_attractor
+DataFrame clifford_attractor(size_t n_iter, double A, double B, double C, double D, double x0, double y0);
+RcppExport SEXP _glow_clifford_attractor(SEXP n_iterSEXP, SEXP ASEXP, SEXP BSEXP, SEXP CSEXP, SEXP DSEXP, SEXP x0SEXP, SEXP y0SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< size_t >::type n_iter(n_iterSEXP);
+    Rcpp::traits::input_parameter< double >::type A(ASEXP);
+    Rcpp::traits::input_parameter< double >::type B(BSEXP);
+    Rcpp::traits::input_parameter< double >::type C(CSEXP);
+    Rcpp::traits::input_parameter< double >::type D(DSEXP);
+    Rcpp::traits::input_parameter< double >::type x0(x0SEXP);
+    Rcpp::traits::input_parameter< double >::type y0(y0SEXP);
+    rcpp_result_gen = Rcpp::wrap(clifford_attractor(n_iter, A, B, C, D, x0, y0));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -86,7 +101,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_glow_is_tbb", (DL_FUNC) &_glow_is_tbb, 0},
     {"_glow_c_map_glow", (DL_FUNC) &_glow_c_map_glow, 15},
     {"_glow_c_map_light", (DL_FUNC) &_glow_c_map_light, 15},
-    {"_glow_mollweide_projection", (DL_FUNC) &_glow_mollweide_projection, 4},
+    {"_glow_mollweide_projection", (DL_FUNC) &_glow_mollweide_projection, 3},
+    {"_glow_clifford_attractor", (DL_FUNC) &_glow_clifford_attractor, 7},
     {NULL, NULL, 0}
 };
 

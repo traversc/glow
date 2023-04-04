@@ -13,22 +13,6 @@ template <typename T> int sgn(T val) {
   return (T(0) < val) - (val < T(0));
 }
 
-#if RCPP_PARALLEL_USE_TBB
-template <typename T>
-inline void parallelReduce2(std::size_t begin, std::size_t end, T & worker, std::size_t grainSize = 1, int nthreads = 1) {
-  int max_threads = tbb::task_scheduler_init::default_num_threads();
-  if(nthreads > max_threads) nthreads = max_threads;
-  tbb::task_arena limited(nthreads);
-  tbb::task_group tg;
-  limited.execute([&]{
-    tg.run([&]{
-      parallelReduce(begin, end, worker, grainSize);
-    });
-  });
-  limited.execute([&]{ tg.wait(); });
-}
-#endif
-
 // [[Rcpp::export(rng = false)]]
 bool is_tbb() {
 #if RCPP_PARALLEL_USE_TBB
@@ -188,7 +172,7 @@ Eigen::MatrixXd c_map_glow(NumericVector x, NumericVector y, NumericVector inten
 #if RCPP_PARALLEL_USE_TBB
   if(nthreads > 1) {
     GlowWorker w(gm, blend_mode, REAL(x), REAL(y), REAL(intensity), REAL(radius), REAL(exponent));
-    parallelReduce2(0, len, w, 100, nthreads);
+    parallelReduce(0, len, w, 100, nthreads);
     if(blend_mode == "screen") {
       w.output.array() = 1.0 - w.output.array() * (1.0-background);
     } else {
@@ -322,7 +306,7 @@ Eigen::ArrayXXd c_map_light(NumericVector x, NumericVector y, NumericVector inte
 #if RCPP_PARALLEL_USE_TBB
   if(nthreads > 1) {
     LightWorker w(lm, blend_mode, REAL(x), REAL(y), REAL(intensity), REAL(radius), REAL(falloff_exponent), REAL(distance_exponent));
-    parallelReduce2(0, len, w, 100, nthreads);
+    parallelReduce(0, len, w, 100, nthreads);
     if(blend_mode == "screen") {
        w.output = 1.0 - w.output * (1.0-background);
     } else {

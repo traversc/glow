@@ -13,3 +13,6 @@ aclocal.m4
 Makefile
 ^.vscode
 .*\.qs
+^inst/examples/plots
+^inst/examples/plot_data
+^.github

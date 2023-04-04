@@ -16,6 +16,79 @@
 #' @name theme_night
 NULL
 
+# light_heat_colors ###################################################
+
+#' light_heat_colors
+#' 
+#' A light color palette.
+#' 
+#' @usage light_heat_colors(...)
+#' @param ... Arguments passed to the function returned by `colorRampPalette`
+#' @return A light color palette function
+#' @details A simple light color palette gradient from red to orange to gold to
+#'  yellow intended for a heatmap with a white or light color background. 
+#'  
+#'  Equivalent to `colorRampPalette(c("red", "darkorange2", "darkgoldenrod1", "gold1", "yellow2"))(...)`.
+#' @examples
+#' light_colors <- light_heat_colors(144)
+#' plot(1:144, 1:144, col = light_colors, pch = 19)
+#' @name light_heat_colors
+NULL
+
+# circular_palette ###################################################
+
+#' circular_palette
+#' 
+#' A helper function for circularizing color palettes. 
+#' 
+#' @usage circular_palette(n, pal_function=rainbow, invert=FALSE, ...)
+#' @param n Number of colors to output (must be divisible by 2)
+#' @param pal_function The base palette to circularize
+#' @param invert Whether to invert the palette See details. 
+#' @param ... Arguments passed to `pal_function`
+#' @return A circular color palette
+#' @details This function is useful when the color represents radial data. E.g. position on a sphere or circle. 
+#' The `invert` parameter reverses the order of circularization. E.g. if your circular palette would be red to blue to red, 
+#' `invert` changes this blue to red to blue.  
+#' @examples
+#' colors <- circular_palette(n=1000, pal_function=rainbow)
+#' t <- seq(0,2*pi, length.out=1000)
+#' plot(sin(t), cos(t), col = colors, pch = 19)
+#' @name circular_palette
+NULL
+
+# map_colors ###################################################
+
+#' map_colors
+#' 
+#' A helper function for manually mapping colors to a vector of colors. 
+#' 
+#' @usage map_colors(colors, x, min_limit=NULL, max_limit=NULL)
+#' @param colors A vector of colors
+#' @param x A numeric vector of data
+#' @param min_limit The minimum value to scale the color to. Must be outside the range of data. If NULL, the minimum is determined by the data. 
+#' @param max_limit The maximum value to scale the color to. Must be outside the range of data. If NULL, the maximum is determined by the data. 
+#' @return A vector of colors. 
+#' @details A helper function for manually mapping colors to a vector of colors. It is useful when you want to manually specify color data, 
+#' rather than relying on ggplot functions. 
+#' @examples
+#' cliff_points <- clifford_attractor(1e4, 1.886,-2.357,-0.328, 0.918, 0.1, 0)
+#' color_pal <- circular_palette(n=144, pal_function=rainbow)
+#' cliff_points$color <- map_colors(color_pal, cliff_points$angle, min_limit=-pi, max_limit=pi)
+#' 
+#' gm <- GlowMapper4$new(xdim=240, ydim=240, blend_mode = "additive", nthreads=1)
+#' gm$map(x=cliff_points$x, y=cliff_points$y, radius=0.1, color=cliff_points$color)
+#' pd <- gm$output_dataframe(saturation = 1)
+#' 
+#' ggplot() +
+#'   geom_raster(data = pd, aes(x = x, y = y, fill = rgb(r,g,b,a)), show.legend=FALSE) +
+#'   coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
+#'   scale_fill_identity() + 
+#'   theme_night()
+#' @name map_colors
+NULL
+
+
 # additive_alpha ###################################################
 
 #' additive_alpha
@@ -62,7 +135,7 @@ NULL
 #' clifford_attractor
 #' 
 #' A 2D chaotic attractor created by Clifford Pickover. 
-#' @usage mollweide_projection(n_iter, A=1.886, B=-2.357, C=-0.328, D=0.918, x0=0.1, y0=0)
+#' @usage clifford_attractor(n_iter, A=1.886, B=-2.357, C=-0.328, D=0.918, x0=0.1, y0=0)
 #' @param n_iter number of points to generate
 #' @param A see details
 #' @param B see details
@@ -78,7 +151,19 @@ NULL
 #' https://en.wikipedia.org/wiki/List_of_chaotic_maps
 #' https://stackoverflow.com/q/51122970/2723734
 #' @examples
-#' clifford_attractor(1e6)
+#' cliff_points <- clifford_attractor(1e4, 1.886,-2.357,-0.328, 0.918, 0.1, 0)
+#' color_pal <- circular_palette(n=144, pal_function=rainbow)
+#' cliff_points$color <- map_colors(color_pal, cliff_points$angle, min_limit=-pi, max_limit=pi)
+#' 
+#' gm <- GlowMapper4$new(xdim=240, ydim=240, blend_mode = "additive", nthreads=1)
+#' gm$map(x=cliff_points$x, y=cliff_points$y, radius=0.1, color=cliff_points$color)
+#' pd <- gm$output_dataframe(saturation = 1)
+#' 
+#' ggplot() +
+#'   geom_raster(data = pd, aes(x = x, y = y, fill = rgb(r,g,b,a)), show.legend=FALSE) +
+#'   coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
+#'   scale_fill_identity() + 
+#'   theme_night()
 #' @name clifford_attractor
 NULL
 

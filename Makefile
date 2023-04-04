@@ -10,25 +10,10 @@ check: $(BUILD)
 
 check-cran: $(BUILD)
 	R --interactive --no-save --args $< <<<'rhub::check_for_cran(commandArgs(T)[1])'
-	# Rscript -e "rhub::check_on_solaris()"
 	Rscript -e 'rhub::check("$(BUILD)", platform = c("solaris-x86-patched"))'
 
-compile:
-	find src/ -type f -exec chmod 644 {} \;
-	Rscript -e "library(Rcpp); compileAttributes('.');"
-	Rscript -e "devtools::load_all(); roxygen2::roxygenise('.');"
-	find . -iname "*.a" -exec rm {} \;
-	find . -iname "*.o" -exec rm {} \;
-	find . -iname "*.so" -exec rm {} \;
-
 build:
-	# autoconf
-	# chmod 755 cleanup
-	# chmod 755 configure
 	find src/ -type f -exec chmod 644 {} \;
-	# chmod 644 ChangeLog DESCRIPTION Makefile NAMESPACE README.md
-	# ./configure
-	# ./cleanup
 	Rscript -e "library(Rcpp); compileAttributes('.');"
 	Rscript -e "devtools::load_all(); roxygen2::roxygenise('.');"
 	find . -iname "*.a" -exec rm {} \;
@@ -37,13 +22,7 @@ build:
 	R CMD build .
 
 install:
-	# autoconf
-	# chmod 755 cleanup
-	# chmod 755 configure
 	find src/ -type f -exec chmod 644 {} \;
-	# chmod 644 ChangeLog DESCRIPTION Makefile NAMESPACE README.md
-	# ./configure
-	# ./cleanup
 	Rscript -e "library(Rcpp); compileAttributes('.');"
 	Rscript -e "devtools::load_all(); roxygen2::roxygenise('.');"
 	find . -iname "*.a" -exec rm {} \;
@@ -55,11 +34,4 @@ install:
 vignette:
 	Rscript -e "rmarkdown::render(input='vignettes/vignette.rmd', output_format='html_vignette')"
 	IS_GITHUB=Yes Rscript -e "rmarkdown::render(input='vignettes/vignette.rmd', output_file='../README.md', output_format=rmarkdown::github_document(html_preview=FALSE))"; unset IS_GITHUB
-	# mv vignettes/vignette.md README.md
-	# sed -r -i 's/\((.+?)\.png /\(tests\/\1\.png /g' README.md
-	# perl -pi -e 's/\((.+?)\.png /\(tests\/\1\.png /g' README.md
-
-test:
-	Rscript tests/tests.r
-	Rscript tests/benchmark_test.r 5
 

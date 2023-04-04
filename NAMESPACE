@@ -3,12 +3,16 @@ importFrom(Rcpp,sourceCpp)
 importFrom(Rcpp,evalCpp)
 importFrom(R6, R6Class)
 import(ggplot2)
-importFrom(grDevices, col2rgb, rgb)
+importFrom(grDevices, col2rgb, rgb, colorRampPalette, rainbow)
 useDynLib(glow, .registration=TRUE)
 export("theme_night",
+       "light_heat_colors",
        "additive_alpha",
        "GlowMapper",
        "GlowMapper4",
        "LightMapper",
        "LightMapper4",
-       "mollweide_projection")
+       "mollweide_projection",
+       "clifford_attractor",
+       "circular_palette",
+       "map_colors")
