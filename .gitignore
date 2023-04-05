@@ -23,7 +23,6 @@ config.status
 autom4te.cache/*
 .vscode
 /src/.vscode
-src/Makevars
 *.qs
 inst/examples/plots/*
 inst/examples/plot_data/*
