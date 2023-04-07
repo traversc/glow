@@ -25,13 +25,23 @@ I.e., a value of 0.02 corresponds to 2% of the plot.
 }
 \examples{
 
-gm <- GlowMapper4$new(xdim=240, ydim=240, blend_mode = "additive", nthreads=1)
-gm$map(x=cliff_points$x, y=cliff_points$y, radius=relx(0.02), color=cliff_points$color)
+gm <- GlowMapper$new(xdim=480, ydim=240, blend_mode = "additive", nthreads=4)
+
+gm$map(x=1:10, y=runif(10)*100, radius=relx(0.01), intensity = 1)
 pd <- gm$output_dataframe(saturation = 1)
 
 ggplot() +
-  geom_raster(data = pd, aes(x = x, y = y, fill = rgb(r,g,b,a)), show.legend=FALSE) +
-  coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
-  scale_fill_identity() + 
+  geom_raster(data = pd, aes(x = x, y = y, fill = value), show.legend=FALSE) +
+  coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) +
+  scale_fill_gradientn(colors = additive_alpha(viridisLite::viridis(12))) +
+  theme_night()
+
+# Relative radius to y-range
+gm$map(x=1:10, y=runif(10)*100, radius=rely(0.01))
+pd <- gm$output_dataframe(saturation = 1)
+ggplot() +
+  geom_raster(data = pd, aes(x = x, y = y, fill = value), show.legend=FALSE) +
+  coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) +
+  scale_fill_gradientn(colors = additive_alpha(viridisLite::viridis(12))) +
   theme_night()
 }

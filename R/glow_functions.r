@@ -115,10 +115,10 @@ GlowMapper <- R6Class("GlowMapper", list(
     self$x_aspect_ratio <- max(xincrement / yincrement,1)
     self$y_aspect_ratio <- max(yincrement / xincrement,1)
     
-    if(class(radius) == "relx") {
+    if(inherits(radius, "relx")) {
       class(radius) <- NULL
       radius <- xdiff * radius / self$x_aspect_ratio
-    } else if(class(radius) == "rely") {
+    } else if(inherits(radius, "rely")) {
       class(radius) <- NULL
       radius <- ydiff * radius / self$y_aspect_ratio
     } else {
@@ -276,10 +276,10 @@ GlowMapper4 <- R6Class("GlowMapper4", list(
     self$y_aspect_ratio <- max(yincrement / xincrement,1)
     
     
-    if(class(radius) == "relx") {
+    if(inherits(radius, "relx")) {
       class(radius) <- NULL
       radius <- xdiff * radius / self$x_aspect_ratio
-    } else if(class(radius) == "rely") {
+    } else if(inherits(radius, "rely")) {
       class(radius) <- NULL
       radius <- ydiff * radius / self$y_aspect_ratio
     } else {
@@ -460,10 +460,10 @@ LightMapper <- R6Class("LightMapper", list(
     self$x_aspect_ratio <- max(xincrement / yincrement,1)
     self$y_aspect_ratio <- max(yincrement / xincrement,1)
     
-    if(class(radius) == "relx") {
+    if(inherits(radius, "relx")) {
       class(radius) <- NULL
       radius <- xdiff * radius / self$x_aspect_ratio
-    } else if(class(radius) == "rely") {
+    } else if(inherits(radius, "rely")) {
       class(radius) <- NULL
       radius <- ydiff * radius / self$y_aspect_ratio
     } else {
@@ -615,10 +615,10 @@ LightMapper4 <- R6Class("GlowMapper4", list(
     self$x_aspect_ratio <- max(xincrement / yincrement,1)
     self$y_aspect_ratio <- max(yincrement / xincrement,1)
     
-    if(class(radius) == "relx") {
+    if(inherits(radius, "relx")) {
       class(radius) <- NULL
       radius <- xdiff * radius / self$x_aspect_ratio
-    } else if(class(radius) == "rely") {
+    } else if(inherits(radius, "rely")) {
       class(radius) <- NULL
       radius <- ydiff * radius / self$y_aspect_ratio
     } else {
