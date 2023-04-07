@@ -4,6 +4,10 @@ Some of these examples are too large to fit in memory on a common desktop enviro
 Could be re-worked to be processed piece-wise.
 Do not blindly source the example scripts in this directory.
 
+Bug-fix: 
+In version 0.11 point radius was implemented incorrectly. 
+In version 0.12 adjust radius in these examples by squaring each value. 
+
 Result images are compressed with https://tinypng.com/ for vignettes. 
 
 ## Examples 

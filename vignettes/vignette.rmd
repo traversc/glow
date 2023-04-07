@@ -99,7 +99,7 @@ nt <- 4
 
 data(diamonds)
 gm <- GlowMapper$new(xdim=800, ydim = 640, blend_mode = "screen", nthreads=nt)
-gm$map(x=diamonds$carat, y=diamonds$price, intensity=1, radius = .1)
+gm$map(x=diamonds$carat, y=diamonds$price, intensity=1, radius = relx(0.02)) # relx(0.02) makes point size relative to x-axis
 pd <- gm$output_dataframe(saturation = 1)
 
 # Dark color theme
@@ -151,7 +151,7 @@ cliff_points$color <- map_colors(color_pal, cliff_points$angle, min_limit=-pi, m
 
 # Create raster
 gm <- GlowMapper4$new(xdim=480, ydim = 270, blend_mode = "additive", nthreads=4)
-gm$map(x=cliff_points$x, y=cliff_points$y, radius=0.05, color=cliff_points$color)
+gm$map(x=cliff_points$x, y=cliff_points$y, radius=1e-3, color=cliff_points$color)
 pd <- gm$output_raw(saturation = 1)
 
 # Output raster with EBImage

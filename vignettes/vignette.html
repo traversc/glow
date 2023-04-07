@@ -434,7 +434,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb2-7" title="7"></a>
 <a class="sourceLine" id="cb2-8" title="8"><span class="kw">data</span>(diamonds)</a>
 <a class="sourceLine" id="cb2-9" title="9">gm &lt;-<span class="st"> </span>GlowMapper<span class="op">$</span><span class="kw">new</span>(<span class="dt">xdim=</span><span class="dv">800</span>, <span class="dt">ydim =</span> <span class="dv">640</span>, <span class="dt">blend_mode =</span> <span class="st">&quot;screen&quot;</span>, <span class="dt">nthreads=</span>nt)</a>
-<a class="sourceLine" id="cb2-10" title="10">gm<span class="op">$</span><span class="kw">map</span>(<span class="dt">x=</span>diamonds<span class="op">$</span>carat, <span class="dt">y=</span>diamonds<span class="op">$</span>price, <span class="dt">intensity=</span><span class="dv">1</span>, <span class="dt">radius =</span> <span class="fl">.1</span>)</a>
+<a class="sourceLine" id="cb2-10" title="10">gm<span class="op">$</span><span class="kw">map</span>(<span class="dt">x=</span>diamonds<span class="op">$</span>carat, <span class="dt">y=</span>diamonds<span class="op">$</span>price, <span class="dt">intensity=</span><span class="dv">1</span>, <span class="dt">radius =</span> <span class="kw">relx</span>(<span class="fl">0.02</span>)) <span class="co"># relx(0.02) makes point size relative to x-axis</span></a>
 <a class="sourceLine" id="cb2-11" title="11">pd &lt;-<span class="st"> </span>gm<span class="op">$</span><span class="kw">output_dataframe</span>(<span class="dt">saturation =</span> <span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb2-12" title="12"></a>
 <a class="sourceLine" id="cb2-13" title="13"><span class="co"># Dark color theme</span></a>
@@ -467,7 +467,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb4-7" title="7"></a>
 <a class="sourceLine" id="cb4-8" title="8"><span class="co"># Create raster</span></a>
 <a class="sourceLine" id="cb4-9" title="9">gm &lt;-<span class="st"> </span>GlowMapper4<span class="op">$</span><span class="kw">new</span>(<span class="dt">xdim=</span><span class="dv">480</span>, <span class="dt">ydim =</span> <span class="dv">270</span>, <span class="dt">blend_mode =</span> <span class="st">&quot;additive&quot;</span>, <span class="dt">nthreads=</span><span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb4-10" title="10">gm<span class="op">$</span><span class="kw">map</span>(<span class="dt">x=</span>cliff_points<span class="op">$</span>x, <span class="dt">y=</span>cliff_points<span class="op">$</span>y, <span class="dt">radius=</span><span class="fl">0.05</span>, <span class="dt">color=</span>cliff_points<span class="op">$</span>color)</a>
+<a class="sourceLine" id="cb4-10" title="10">gm<span class="op">$</span><span class="kw">map</span>(<span class="dt">x=</span>cliff_points<span class="op">$</span>x, <span class="dt">y=</span>cliff_points<span class="op">$</span>y, <span class="dt">radius=</span><span class="fl">1e-3</span>, <span class="dt">color=</span>cliff_points<span class="op">$</span>color)</a>
 <a class="sourceLine" id="cb4-11" title="11">pd &lt;-<span class="st"> </span>gm<span class="op">$</span><span class="kw">output_raw</span>(<span class="dt">saturation =</span> <span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb4-12" title="12"></a>
 <a class="sourceLine" id="cb4-13" title="13"><span class="co"># Output raster with EBImage</span></a>

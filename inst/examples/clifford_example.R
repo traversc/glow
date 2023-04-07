@@ -52,7 +52,7 @@ color_pal <- circular_palette(n=144, pal_function=rainbow, alpha=0.5)
 cliff_points$color <- map_colors(color_pal, cliff_points$angle, min_limit=-pi, max_limit=pi)
 
 gm <- GlowMapper4$new(xdim=960, ydim = 540, blend_mode = "additive", nthreads=4)
-gm$map(x=cliff_points$x, y=cliff_points$y, radius=0.02, color=cliff_points$color)
+gm$map(x=cliff_points$x, y=cliff_points$y, radius=0.03, color=cliff_points$color)
 pd <- gm$output_raw(saturation = 1)
 
 image_array <- array(1, dim=c(960, 540, 3))

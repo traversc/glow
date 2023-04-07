@@ -15,4 +15,6 @@ export("theme_night",
        "mollweide_projection",
        "clifford_attractor",
        "circular_palette",
-       "map_colors")
+       "map_colors",
+       "relx", 
+       "rely")

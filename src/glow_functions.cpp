@@ -90,8 +90,8 @@ struct GlowMapper {
     
     mat.block(xblock_min, yblock_min, xblock_size, yblock_size).array() *= 
       1.0-(
-          (((xvec.segment(xblock_min, xblock_size).array() - x))/pow(radius,2.0)).abs().pow(exponent).exp().inverse().matrix() *
-            (((yvec.segment(yblock_min, yblock_size).array() - y))/pow(radius,2.0)).abs().pow(exponent).exp().inverse().matrix() * intensity
+          ((xvec.segment(xblock_min, xblock_size).array() - x)/radius).abs().pow(exponent).exp().inverse().matrix() *
+          ((yvec.segment(yblock_min, yblock_size).array() - y)/radius).abs().pow(exponent).exp().inverse().matrix() * intensity
       ).array();
   }
   void additive_update(Eigen::MatrixXd & mat, const double x, const double y, const double intensity, const double radius, const double exponent) const {
@@ -112,8 +112,8 @@ struct GlowMapper {
     //   yblock_min << " xblock_size: " << xblock_size << " yblock_size: " << yblock_size << std::endl;
     
     mat.block(xblock_min, yblock_min, xblock_size, yblock_size) += 
-      (((xvec.segment(xblock_min, xblock_size).array() - x))/pow(radius,2.0)).abs().pow(exponent).exp().inverse().matrix() *
-      (((yvec.segment(yblock_min, yblock_size).array() - y))/pow(radius,2.0)).abs().pow(exponent).exp().inverse().matrix() * intensity;
+      ((xvec.segment(xblock_min, xblock_size).array() - x)/radius).abs().pow(exponent).exp().inverse().matrix() *
+      ((yvec.segment(yblock_min, yblock_size).array() - y)/radius).abs().pow(exponent).exp().inverse().matrix() * intensity;
   }
 };
 

@@ -88,6 +88,49 @@ NULL
 #' @name map_colors
 NULL
 
+# relxy ###################################################
+
+#' relxy
+#' 
+#' Helper functions for specifying the `radius` parameter in `GlowMapper$map` and similar. 
+#' 
+#' @usage relx(r)
+#' @aliases relx
+#' @param r Radius of point data relative to X or Y range of the plot, a value between 0 and 1. 
+#' @return A class structure for input to `GlowMapper$map`
+#' @details 
+#' Helper functions for specifying the `radius` parameter relative to the range of the plot as a proportion. 
+#' I.e., a value of 0.02 corresponds to 2% of the plot. 
+#' @examples
+#' 
+#' gm <- GlowMapper$new(xdim=480, ydim=240, blend_mode = "additive", nthreads=4)
+#' 
+# Relative radius to x-range
+#' gm$map(x=1:10, y=runif(10)*100, radius=relx(0.01), intensity = 1)
+#' pd <- gm$output_dataframe(saturation = 1)
+#' 
+#' ggplot() +
+#'   geom_raster(data = pd, aes(x = x, y = y, fill = value), show.legend=FALSE) +
+#'   coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) +
+#'   scale_fill_gradientn(colors = additive_alpha(viridisLite::viridis(12))) +
+#'   theme_night()
+#' 
+#' # Relative radius to y-range
+#' gm$map(x=1:10, y=runif(10)*100, radius=rely(0.01))
+#' pd <- gm$output_dataframe(saturation = 1)
+#' ggplot() +
+#'   geom_raster(data = pd, aes(x = x, y = y, fill = value), show.legend=FALSE) +
+#'   coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) +
+#'   scale_fill_gradientn(colors = additive_alpha(viridisLite::viridis(12))) +
+#'   theme_night()
+#' @name relxy
+NULL
+
+#' @usage rely(r)
+#' @aliases rely
+#' @name relxy
+NULL
+
 
 # additive_alpha ###################################################
 
