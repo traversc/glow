@@ -18,6 +18,10 @@ light_heat_colors <- function(...) {
   colorRampPalette(c("red", "darkorange2", "darkgoldenrod1", "gold1", "yellow2"))(...)
 }
 
+light_cool_colors <- function(...) {
+  colorRampPalette(c("#1133AA", "#CCFFFF"))(...)
+}
+
 additive_alpha <- function(colors) {
   s <- seq(2, length(colors))
   x <- t(col2rgb(colors, alpha=F))/255
@@ -44,14 +48,42 @@ map_colors <- function(colors, x, min_limit=NULL, max_limit=NULL) {
   colors[findInterval(x, seq(min_limit, max_limit, length.out = length(colors) + 1), all.inside = TRUE)]
 }
 
-relx <- function(r) {
-  structure(r, class = "relx")
+relx <- function(r, mode = "data") {
+  structure(r, class = "relx", mode = mode)
 }
 
-rely <- function(r) {
-  structure(r, class = "rely")
+rely <- function(r, mode = "data") {
+  structure(r, class = "rely", mode = mode)
 }
 
+# internal helper function
+calculate_radius <- function(radius, xdiff, ydiff, self) {
+    plot_x_diff <- self$xmax - self$xmin
+    plot_y_diff <- self$ymax - self$ymin
+    if(inherits(radius, "relx")) {
+      rel_mode <- attr(radius, "mode")
+      attributes(radius) <- NULL
+      if(rel_mode == "data") {
+        radius <- xdiff * radius / self$x_aspect_ratio
+      } else if(rel_mode == "plot") {
+        radius <- plot_x_diff * radius / self$x_aspect_ratio
+      } else {
+        stop("relx mode must be 'data' or 'plot'")
+      }
+    } else if(inherits(radius, "rely")) {
+      rel_mode <- attr(radius, "mode")
+      attributes(radius) <- NULL
+      if(rel_mode == "data") {
+        radius <- ydiff * radius / self$y_aspect_ratio
+      } else if(rel_mode == "plot") {
+        radius <- plot_y_diff * radius / self$y_aspect_ratio
+      } else {
+        stop("rely mode must be 'data' or 'plot'")
+      }
+    } else {
+      radius
+    }
+}
 
 # GlowMapper ###################################
 GlowMapper <- R6Class("GlowMapper", list(
@@ -115,16 +147,7 @@ GlowMapper <- R6Class("GlowMapper", list(
     self$x_aspect_ratio <- max(xincrement / yincrement,1)
     self$y_aspect_ratio <- max(yincrement / xincrement,1)
     
-    if(inherits(radius, "relx")) {
-      class(radius) <- NULL
-      radius <- xdiff * radius / self$x_aspect_ratio
-    } else if(inherits(radius, "rely")) {
-      class(radius) <- NULL
-      radius <- ydiff * radius / self$y_aspect_ratio
-    } else {
-      # nothing
-    }
-    class(radius) <- NULL
+    radius <- calculate_radius(radius, xdiff, ydiff, self)
     
     self$plot_data <- data.frame(x, y, intensity, radius, distance_exponent)
     
@@ -275,17 +298,7 @@ GlowMapper4 <- R6Class("GlowMapper4", list(
     self$x_aspect_ratio <- max(xincrement / yincrement,1)
     self$y_aspect_ratio <- max(yincrement / xincrement,1)
     
-    
-    if(inherits(radius, "relx")) {
-      class(radius) <- NULL
-      radius <- xdiff * radius / self$x_aspect_ratio
-    } else if(inherits(radius, "rely")) {
-      class(radius) <- NULL
-      radius <- ydiff * radius / self$y_aspect_ratio
-    } else {
-      # nothing
-    }
-    class(radius) <- NULL
+    radius <- calculate_radius(radius, xdiff, ydiff, self)
     
     self$plot_data <- data.frame(x, y, r,g,b, radius, distance_exponent)
     
@@ -460,16 +473,7 @@ LightMapper <- R6Class("LightMapper", list(
     self$x_aspect_ratio <- max(xincrement / yincrement,1)
     self$y_aspect_ratio <- max(yincrement / xincrement,1)
     
-    if(inherits(radius, "relx")) {
-      class(radius) <- NULL
-      radius <- xdiff * radius / self$x_aspect_ratio
-    } else if(inherits(radius, "rely")) {
-      class(radius) <- NULL
-      radius <- ydiff * radius / self$y_aspect_ratio
-    } else {
-      # nothing
-    }
-    class(radius) <- NULL
+    radius <- calculate_radius(radius, xdiff, ydiff, self)
     
     self$plot_data <- data.frame(x, y, intensity, radius, falloff_exponent, distance_exponent)
     
@@ -615,16 +619,7 @@ LightMapper4 <- R6Class("GlowMapper4", list(
     self$x_aspect_ratio <- max(xincrement / yincrement,1)
     self$y_aspect_ratio <- max(yincrement / xincrement,1)
     
-    if(inherits(radius, "relx")) {
-      class(radius) <- NULL
-      radius <- xdiff * radius / self$x_aspect_ratio
-    } else if(inherits(radius, "rely")) {
-      class(radius) <- NULL
-      radius <- ydiff * radius / self$y_aspect_ratio
-    } else {
-      # nothing
-    }
-    class(radius) <- NULL
+    radius <- calculate_radius(radius, xdiff, ydiff, self)
     
     self$plot_data <- data.frame(x, y, r,g,b, radius, distance_exponent, falloff_exponent)
     

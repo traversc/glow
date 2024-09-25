@@ -95,7 +95,7 @@ ggplot() +
 ![](vignettes/diamonds_vignette_dark.png "diamonds_vignette_dark.png")
 
 ``` r
-# light color theme
+# light "heat" color theme
 light_colors <- light_heat_colors(144)
 ggplot() + 
   geom_raster(data = pd, aes(x = pd$x, y = pd$y, fill = pd$value), show.legend = FALSE) +
@@ -106,6 +106,19 @@ ggplot() +
 ```
 
 ![](vignettes/diamonds_vignette_light.png "diamonds_vignette_light.png")
+
+``` r
+# light "cool" color theme
+light_colors <- light_cool_colors(144)
+ggplot() + 
+  geom_raster(data = pd, aes(x = pd$x, y = pd$y, fill = pd$value), show.legend = FALSE) +
+  scale_fill_gradientn(colors = additive_alpha(light_colors)) +
+  coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
+  labs(x = "carat", y = "price") + 
+  theme_bw(base_size = 14)
+```
+
+![](vignettes/diamonds_vignette_cool.png "diamonds_vignette_cool.png")
 
 ### Writing a raster image directly
 

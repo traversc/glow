@@ -1,4 +1,4 @@
-library(qs)
+library(qs2)
 library(glow)
 library(EBImage)
 
@@ -10,7 +10,7 @@ output_height = 1080*4
 radius <- 0.2 # Increase this value if plotting fewer points
 intensity <- 0.6 # Increase this value if plotting fewer points
 
-gps <- qread("plot_data/simple-gps-points.qs", nthreads=32)
+gps <- qs_read("plot_data/simple-gps-points.qs2", nthreads=32)
 
 length(gps$latitude) # 2770233904
 

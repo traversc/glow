@@ -4,7 +4,7 @@ library(glow)
 library(dplyr)
 library(data.table)
 library(arrow)
-library(qs)
+library(qs2)
 library(stringr)
 
 # COVID example
@@ -41,7 +41,7 @@ stars <- lapply(files, function(f) {
 stars2 <- stars[complete.cases(stars),]
 stars2 <- stars2 %>% arrange_all
 
-qsave(stars2, "plot_data/gaia_stars.qs", preset = "custom", algorithm = "zstd", compress_level = 22, nthreads = 8)
+qs_save(stars2, "plot_data/gaia_stars.qs2", preset = "custom", algorithm = "zstd", compress_level = 22, nthreads = 8)
 
 
 # COVID #######################################################################
@@ -61,7 +61,7 @@ centroids <- left_join(centroids, cov_cases, by = c("name", "state_abbr"))
 centroids$total[is.na(centroids$total)] <- 0
 centroids <- filter(centroids, total > 0)
 
-qsave(list(centroids=centroids, county=county, state=state), "plot_data/covid_confirmed_usafacts.qs", preset = "custom", algorithm = "zstd", compress_level = 22)
+qs_save(list(centroids=centroids, county=county, state=state), "plot_data/covid_confirmed_usafacts.qs2", preset = "custom", algorithm = "zstd", compress_level = 22)
 
 
 # Volcano ##########################################
@@ -102,7 +102,7 @@ DMPs <- topTable(fit2, num=Inf, coef=1, genelist=ann450kSub)
 DMPs <- DMPs %>% dplyr::select(logFC, P.Value, adj.P.Val)
 rownames(DMPs) <- NULL
 
-qsave(DMPs, file = "plot_data/methylation_data.qs", preset = "custom", algorithm = "zstd", compress_level = 22)
+qs_save(DMPs, file = "plot_data/methylation_data.qs2", preset = "custom", algorithm = "zstd", compress_level = 22)
 
 # Airline ######################################################################
 # https://www.r-bloggers.com/visualize-large-data-sets-with-the-bigvis-package/
@@ -119,7 +119,7 @@ air <- lapply(1:length(files), function(i) {
     filter(complete.cases(.))
   return(z)
 })
-qsave(air, file="plot_data/AirOnTime.qs", preset = "custom", algorithm = "zstd", compress_level = 22, nthreads=nt)
+qs_save(air, file="plot_data/AirOnTime.qs2", preset = "custom", algorithm = "zstd", compress_level = 22, nthreads=nt)
 
 # GPS traces ######################################################################
 # https://planet.osm.org/gps/
@@ -130,6 +130,6 @@ system(sprintf("unxz %s/simple-gps-points-120312.txt.xz", tempdir))
 gps <- data.table::fread(sprintf("%s/simple-gps-points-120312.txt", tempdir), header=FALSE, data.table=FALSE)
 gps <- list(latitude = gps[[1]], longitude = gps[[2]]) # Long dataframes not supported in R as of 4.2.3
 
-qsave(gps, file="plot_data/simple-gps-points.qs", preset = "custom", algorithm = "zstd", compress_level = 22, nthreads=nt)
+qs_save(gps, file="plot_data/simple-gps-points.qs2", preset = "custom", algorithm = "zstd", compress_level = 22, nthreads=nt)
 
 

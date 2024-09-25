@@ -1,0 +1,6 @@
+Version 0.13.0 (2024-09-024)
+    * Add 'mode' parameter to 'relx' and 'rely'.
+    * Suggest 'qs2' instead of 'qs'
+    * Add 'light_cool_colors' theme
+Version 0.12.0 (2023-04-06)
+    * Initial tracking

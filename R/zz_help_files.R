@@ -35,6 +35,25 @@ NULL
 #' @name light_heat_colors
 NULL
 
+# light_cool_colors ###################################################
+
+#' light_cool_colors
+#' 
+#' A light color palette.
+#' 
+#' @usage light_cool_colors(...)
+#' @param ... Arguments passed to the function returned by `colorRampPalette`
+#' @return A light color palette function
+#' @details A simple light color palette gradient from dark blue to light blue 
+#' intended for a heatmap with a white or light color background. 
+#'  
+#'  Equivalent to `colorRampPalette(c("#1133AA", "#CCFFFF"))(...)`.
+#' @examples
+#' light_colors <- light_cool_colors(144)
+#' plot(1:144, 1:144, col = light_colors, pch = 19)
+#' @name light_cool_colors
+NULL
+
 # circular_palette ###################################################
 
 #' circular_palette
@@ -94,9 +113,11 @@ NULL
 #' 
 #' Helper functions for specifying the `radius` parameter in `GlowMapper$map` and similar. 
 #' 
-#' @usage relx(r)
-#' @aliases relx
-#' @param r Radius of point data relative to X or Y range of the plot, a value between 0 and 1. 
+#' @usage relx(r, mode = "data")
+#' @usage rely(r, mode = "data")
+#' @param r Radius of point data relative to X or Y range of the plot, a value between 0 and 1.
+#' @param mode One of "data" (default) or "plot". Whether to use a radius relative to the extent 
+#' of the data range or the plot range (which could have been adjusted manually).
 #' @return A class structure for input to `GlowMapper$map`
 #' @details 
 #' Helper functions for specifying the `radius` parameter relative to the range of the plot as a proportion. 
@@ -126,7 +147,10 @@ NULL
 #' @name relxy
 NULL
 
-#' @usage rely(r)
+#' @aliases relx
+#' @name relxy
+NULL
+
 #' @aliases rely
 #' @name relxy
 NULL

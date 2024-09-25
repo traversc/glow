@@ -6,12 +6,15 @@
 \alias{rely}
 \title{relxy}
 \usage{
-relx(r)
+relx(r, mode = "data")
 
-rely(r)
+rely(r, mode = "data")
 }
 \arguments{
 \item{r}{Radius of point data relative to X or Y range of the plot, a value between 0 and 1.}
+
+\item{mode}{One of "data" (default) or "plot". Whether to use a radius relative to the extent 
+of the data range or the plot range (which could have been adjusted manually).}
 }
 \value{
 A class structure for input to `GlowMapper$map`

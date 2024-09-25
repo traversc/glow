@@ -13,7 +13,7 @@
 
 library(dplyr)
 library(data.table)
-library(qs)
+library(qs2)
 
 library(glow)
 library(ggplot2)
@@ -59,7 +59,7 @@ output_width = 1920*4
 output_height = 1080*4
 outfile <- "plots/GAIA_galaxy_pseudocolor.png"
 
-stars <- qread("plot_data/gaia_stars.qs")
+stars <- qs_read("plot_data/gaia_stars.qs2")
 
 # Transform to galactic coordinates
 # https://gea.esac.esa.int/archive/documentation/GDR2/Data_processing/chap_cu3ast/sec_cu3ast_intro/ssec_cu3ast_intro_tansforms.html
@@ -116,7 +116,7 @@ writeImage(img, "plots/GAIA_galaxy_pseudocolor.png")
 
 outfile <- "plots/US_coronavirus_2021.png"
 
-cov_cases <- qread("plot_data/covid_confirmed_usafacts.qs")
+cov_cases <- qs_read("plot_data/covid_confirmed_usafacts.qs2")
 centroids <- cov_cases$centroids
 state <- cov_cases$state
 county <- cov_cases$county
@@ -280,9 +280,23 @@ outfile <- "plots/diamonds_vignette_light.png"
 ggsave(g, file=outfile, width=10, height=4, dpi=96)
 trim_image(outfile, "white")
 
+# light color theme with cool colors
+light_colors <- colorRampPalette(c("#1133AA", "#CCFFFF"))(144)
+g <- ggplot() + 
+  geom_raster(data = pd, aes(x = pd$x, y = pd$y, fill = pd$value), show.legend = F) +
+  scale_fill_gradientn(colors = additive_alpha(light_colors)) +
+  coord_fixed(gm$aspect(), xlim = gm$xlim(), ylim = gm$ylim()) + 
+  labs(x = "carat", y = "price") + 
+  theme_bw(base_size = 14)
+
+outfile <- "plots/diamonds_vignette_cool.png"
+ggsave(g, file=outfile, width=10, height=4, dpi=96)
+trim_image(outfile, "white")
+
+
 # Volcano ##########################################
 
-DMPs <- qread("plot_data/methylation_data.qs")
+DMPs <- qs_read("plot_data/methylation_data.qs2")
 
 adj_pval_threshold <- DMPs %>% filter(adj.P.Val < 0.05) %>%
   pull(P.Value) %>% max
@@ -308,7 +322,7 @@ trim_image(outfile,  "white")
 # https://www.r-bloggers.com/visualize-large-data-sets-with-the-bigvis-package/
 ## wget https://packages.revolutionanalytics.com/datasets/AirOnTime87to12/AirOnTimeCSV.zip .
 
-air <- qread("plot_data/AirOnTime.qs", nthreads=nt)
+air <- qs_read("plot_data/AirOnTime.qs2", nthreads=nt)
 
 temp <- rbindlist(air)
 qlo1 <- temp$ARR_DELAY %>% quantile(0.0025)
