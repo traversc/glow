@@ -2,7 +2,7 @@ glow
 ================
 
 [![R-CMD-check](https://github.com/traversc/glow/workflows/R-CMD-check/badge.svg)](https://github.com/traversc/glow/actions)
-[![CRAN-Status-Badge](http://www.r-pkg.org/badges/version/glow)](https://cran.r-project.org/package=glow)
+[![CRAN-Status-Badge](https://www.r-pkg.org/badges/version/glow)](https://cran.r-project.org/package=glow)
 [![CRAN-Downloads-Badge](https://cranlogs.r-pkg.org/badges/glow)](https://cran.r-project.org/package=glow)
 [![CRAN-Downloads-Total-Badge](https://cranlogs.r-pkg.org/badges/grand-total/glow)](https://cran.r-project.org/package=glow)
 
