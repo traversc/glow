@@ -251,7 +251,7 @@ library(viridisLite) # Magma color scale
 
 data(diamonds)
 gm <- GlowMapper$new(xdim=800, ydim = 640, blend_mode = "screen", nthreads=nt)
-gm$map(x=diamonds$carat, y=diamonds$price, intensity=1, radius = .1)
+gm$map(x=diamonds$carat, y=diamonds$price, intensity=1, radius = rely(0.002))
 pd <- gm$output_dataframe(saturation = 1)
 
 # Dark color theme
@@ -268,7 +268,7 @@ trim_image(outfile, magma(12)[1])
 
 
 # light color theme
-light_colors <- colorRampPalette(c("red", "darkorange2", "darkgoldenrod1", "gold1", "yellow2"))(144)
+light_colors <- glow::light_heat_colors(144)
 g <- ggplot() + 
   geom_raster(data = pd, aes(x = pd$x, y = pd$y, fill = pd$value), show.legend = F) +
   scale_fill_gradientn(colors = additive_alpha(light_colors)) +
@@ -281,7 +281,7 @@ ggsave(g, file=outfile, width=10, height=4, dpi=96)
 trim_image(outfile, "white")
 
 # light color theme with cool colors
-light_colors <- colorRampPalette(c("#1133AA", "#CCFFFF"))(144)
+light_colors <- light_cool_colors(144)
 g <- ggplot() + 
   geom_raster(data = pd, aes(x = pd$x, y = pd$y, fill = pd$value), show.legend = F) +
   scale_fill_gradientn(colors = additive_alpha(light_colors)) +

@@ -80,7 +80,9 @@ nt <- 4
 
 data(diamonds)
 gm <- GlowMapper$new(xdim=800, ydim = 640, blend_mode = "screen", nthreads=nt)
-gm$map(x=diamonds$carat, y=diamonds$price, intensity=1, radius = relx(0.02)) # relx(0.02) makes point size relative to x-axis
+
+# relx(0.002) makes point size relative to x-axis, e.g. each point radius is 0.2% of the y-axis
+gm$map(x=diamonds$carat, y=diamonds$price, intensity=1, radius = rely(0.002))
 pd <- gm$output_dataframe(saturation = 1)
 
 # Dark color theme
